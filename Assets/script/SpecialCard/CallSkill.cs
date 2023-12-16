@@ -199,6 +199,7 @@ public class CallSkill : MonoBehaviourPunCallbacks
         sCard = Instantiate(Resources.Load("Prefab/SpecialCard") as GameObject).GetComponent<SCardController>();
         sCard.Init(No);
         sCard.gameObject.transform.SetParent(GameObject.Find("Canvas").transform, false);
+        sCard.gameObject.SetActive(false);
     }
 
     [PunRPC]

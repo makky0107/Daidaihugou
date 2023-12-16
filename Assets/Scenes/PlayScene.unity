@@ -1376,6 +1376,7 @@ MonoBehaviour:
   screenHeight: 0
   playerScreenSizes: []
   lS: {fileID: 0}
+  graphicRaycaster: {fileID: 0}
 --- !u!114 &378266036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1758,6 +1759,7 @@ MonoBehaviour:
   screenHeight: 0
   playerScreenSizes: []
   lS: {fileID: 0}
+  graphicRaycaster: {fileID: 0}
 --- !u!114 &602349716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3465,6 +3467,7 @@ MonoBehaviour:
   screenHeight: 0
   playerScreenSizes: []
   lS: {fileID: 0}
+  graphicRaycaster: {fileID: 0}
 --- !u!114 &1364967666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5178,6 +5181,7 @@ MonoBehaviour:
   screenHeight: 0
   playerScreenSizes: []
   lS: {fileID: 0}
+  graphicRaycaster: {fileID: 1525557984}
 --- !u!114 &1997902480
 MonoBehaviour:
   m_ObjectHideFlags: 0
