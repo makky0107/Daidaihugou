@@ -1,4 +1,4 @@
-Library: C:\Users\牧野　拓也\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
+Library: C:\Users\takuy\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --platform=Windows
 --backend=burst-llvm-15
 --target=AVX2
@@ -58,10 +58,10 @@ Library: C:\Users\牧野　拓也\OneDrive\デスクトップ\ゲーム関連\Da
 --assembly-defines=mscorlib;
 --linker-options=PdbAltPath="Daidaihugou_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
---temp-folder=C:\Users\牧野　拓也\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Temp\Burst
---key-folder=C:/Users/牧野　拓也/Documents/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
---decode-folder=C:\Users\牧野　拓也\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Library\Burst
---output=C:\Users\牧野　拓也\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
+--temp-folder=C:\Users\takuy\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Temp\Burst
+--key-folder=C:/Users/takuy/OneDrive/デスクトップ/Unity関連/2022.3.15f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
+--decode-folder=C:\Users\takuy\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Library\Burst
+--output=C:\Users\takuy\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 
 --method=Unity.Burst.BurstCompiler+BurstCompilerHelper, Unity.Burst, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::IsBurstEnabled()--8c2be93e18276203cbd918daa2748a10
@@ -154,10 +154,10 @@ Library: C:\Users\牧野　拓也\OneDrive\デスクトップ\ゲーム関連\Da
 --assembly-defines=mscorlib;
 --linker-options=PdbAltPath="Daidaihugou_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
---temp-folder=C:\Users\牧野　拓也\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Temp\Burst
---key-folder=C:/Users/牧野　拓也/Documents/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
---decode-folder=C:\Users\牧野　拓也\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Library\Burst
---output=C:\Users\牧野　拓也\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
+--temp-folder=C:\Users\takuy\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Temp\Burst
+--key-folder=C:/Users/takuy/OneDrive/デスクトップ/Unity関連/2022.3.15f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
+--decode-folder=C:\Users\takuy\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Library\Burst
+--output=C:\Users\takuy\OneDrive\デスクトップ\ゲーム関連\Daidaihugou\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 
 --method=Unity.Burst.BurstCompiler+BurstCompilerHelper, Unity.Burst, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::IsBurstEnabled()--8c2be93e18276203cbd918daa2748a10

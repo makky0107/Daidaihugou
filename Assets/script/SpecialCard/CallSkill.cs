@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.EventSystems;
 
 public class CallSkill : MonoBehaviourPunCallbacks
 {
@@ -26,6 +27,8 @@ public class CallSkill : MonoBehaviourPunCallbacks
     public List<float> playerScreenSizes;
 
     public LoggerScroll lS;
+
+    public GraphicRaycaster graphicRaycaster;
 
     private void Awake()
     {
@@ -60,7 +63,7 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
         CallShadow();
         HideCountText();
-        CallSCard();
+        CallSCard(sCardNo);
         CallActivateOBJ();
         CallUsePanel();
         photonView.RPC("DestroyUsePanel", RpcTarget.Others);
@@ -72,6 +75,8 @@ public class CallSkill : MonoBehaviourPunCallbacks
         atherPanel.gameObject.transform.localPosition = Vector3.zero;
         usePanel.gameObject.transform.localPosition = new Vector3(0, -1000f / 2540f * (float)Screen.height, transform.localPosition.z);
         sCard.gameObject.transform.localPosition = new Vector3(0, 300f / 2540f * (float)Screen.height, transform.localPosition.z);
+
+        MovePanel();
     }
 
     public void SkillDestroy()
@@ -87,27 +92,27 @@ public class CallSkill : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void InfoForOther(int player)
+    public void InfoForOther(int player, int sCardNumber)
     {
         lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther1");
         Debug.LogWarning($"<size=22><color=orange>InfoForOther1</color></size>");
         CallShadow();
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther2");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther2");
         Debug.LogWarning($"<size=22><color=orange>InfoForOther2</color></size>");
-        CallSCard();
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther3");
+        CallSCard(sCardNumber);
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther3");
         Debug.LogWarning($"<size=22><color=orange>InfoForOther3</color></size>");
-        SCardSetField();
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther4");
+        //SCardSetField();
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther4");
         Debug.LogWarning($"<size=22><color=orange>InfoForOther4</color></size>");
         CallOkPanel();
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther5");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther5");
         Debug.LogWarning($"<size=22><color=orange>InfoForOther5</color></size>");
         ShadowSetInfo();
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther6");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther6");
         Debug.LogWarning($"<size=22><color=orange>InfoForOther6</color></size>");
         StartCountdown();
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther7");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther7");
         Debug.LogWarning($"<size=22><color=orange>InfoForOther7</color></size>");
 
         screenHeight = playerScreenSizes[player];
@@ -119,6 +124,8 @@ public class CallSkill : MonoBehaviourPunCallbacks
         atherPanel.gameObject.transform.localPosition = Vector3.zero;
         usePanel.gameObject.transform.localPosition = new Vector3(0, -1000f / 2540f * screenHeight, transform.localPosition.z);
         sCard.gameObject.transform.localPosition = new Vector3(0, 300f / 2540f * screenHeight, transform.localPosition.z);
+
+        MovePanel();
     }
 
     [PunRPC]
@@ -185,12 +192,12 @@ public class CallSkill : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void CallSCard()
+    public void CallSCard(int No)
     {
         //Debug.LogWarning($"<size=18><color=purple>CallSCard</color></size>");
 
         sCard = Instantiate(Resources.Load("Prefab/SpecialCard") as GameObject).GetComponent<SCardController>();
-        sCard.Init(sCardNo);
+        sCard.Init(No);
         sCard.gameObject.transform.SetParent(GameObject.Find("Canvas").transform, false);
     }
 
@@ -226,6 +233,76 @@ public class CallSkill : MonoBehaviourPunCallbacks
         activate.call = this;
 
         //Debug.LogWarning($"<size=24><color=red>activate.call {activate.call}</color></size>");
+    }
+
+    public void MovePanel()
+    {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel1");
+
+        bool panelBool = IsOver(usePanel.GetComponent<RectTransform>());
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel2");
+
+        if (panelBool)
+        {
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel3");
+
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel Is true");
+        }
+        else
+        {
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel3");
+
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel Is false");
+        }
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel4");
+
+        if (IsOver(usePanel.GetComponent<RectTransform>()))
+        {
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel5");
+
+            usePanel.transform.localPosition -= Vector3.up * 20;
+            MovePanel();
+        }
+        else
+        {
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel5");
+
+            return;
+        }
+    }
+
+    [PunRPC]
+    public bool IsOver(RectTransform targetPanel)
+    {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver1");
+
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver2");
+
+        pointerEventData.position = RectTransformUtility.WorldToScreenPoint(Camera.main, targetPanel.position);
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver3");
+
+        List<RaycastResult> results = new List<RaycastResult>();
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver4");
+
+        graphicRaycaster.Raycast(pointerEventData, results);
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver5");
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject != targetPanel.gameObject)
+            {
+                lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver6");
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     [PunRPC]

@@ -41,7 +41,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
                 Debug.LogWarning($"<size=22><color=orange>Judge Info Act</color></size>");
 
-                call.photonView.RPC("InfoForOther", PhotonNetwork.PlayerList[i], sCardNo);
+                call.photonView.RPC("InfoForOther", PhotonNetwork.PlayerList[i], i, sCardNo);
             }
         }
     }
