@@ -170,8 +170,9 @@ public class CallSkill : MonoBehaviourPunCallbacks
         usePanel = PhotonNetwork.Instantiate("Prefab/UsePanel", transform.position, Quaternion.identity).GetComponent<Image>();
         SCardUse panel = usePanel.GetComponent<SCardUse>();
 
-        panel.gameObject.transform.SetParent(atherPanel.transform, false);
         Destroy(usePanel.GetComponent<InterfaceAdjustment>());
+
+        panel.gameObject.transform.SetParent(atherPanel.transform, false);
 
         panel.sCard = sCard;
         panel.activate = activate;
@@ -187,8 +188,9 @@ public class CallSkill : MonoBehaviourPunCallbacks
         use.atherPanel = atherPanel;
         use.usePanel = usePanel;
 
-        usePanel.gameObject.transform.SetParent(atherPanel.transform, false);
         Destroy(usePanel.GetComponent<InterfaceAdjustment>());
+
+        usePanel.gameObject.transform.SetParent(atherPanel.transform, false);
     }
 
     [PunRPC]
@@ -199,7 +201,7 @@ public class CallSkill : MonoBehaviourPunCallbacks
         sCard = Instantiate(Resources.Load("Prefab/SpecialCard") as GameObject).GetComponent<SCardController>();
         sCard.Init(No);
         sCard.gameObject.transform.SetParent(GameObject.Find("Canvas").transform, false);
-        sCard.gameObject.SetActive(false);
+        //sCard.gameObject.SetActive(false);
     }
 
     [PunRPC]
@@ -240,33 +242,22 @@ public class CallSkill : MonoBehaviourPunCallbacks
     {
         lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel1");
 
-        bool panelBool = IsOver(usePanel.GetComponent<RectTransform>());
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"usePanel is {usePanel}");
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel Is {IsOver(usePanel.GetComponent<RectTransform>())}");
+
         lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel2");
-
-        if (panelBool)
-        {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel3");
-
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel Is true");
-        }
-        else
-        {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel3");
-
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel Is false");
-        }
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel4");
 
         if (IsOver(usePanel.GetComponent<RectTransform>()))
         {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel5");
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel3");
 
             usePanel.transform.localPosition -= Vector3.up * 20;
             MovePanel();
         }
         else
         {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel5");
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel4");
 
             return;
         }
@@ -289,13 +280,19 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver4");
 
-        graphicRaycaster.Raycast(pointerEventData, results);
+        EventSystem.current.RaycastAll(pointerEventData, results);
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"results.count {results.Count}");
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver5");
 
         foreach (RaycastResult result in results)
         {
-            if (result.gameObject != targetPanel.gameObject)
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"result is {result}");
+
+            SCardController cont = result.gameObject.GetComponent<SCardController>();
+
+            if (cont != null)
             {
                 lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver6");
 
