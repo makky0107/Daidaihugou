@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class CallSkill : MonoBehaviourPunCallbacks
 {
@@ -272,7 +273,7 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver2");
 
-        pointerEventData.position = RectTransformUtility.WorldToScreenPoint(Camera.main, targetPanel.position);
+        pointerEventData.position = targetPanel.position;
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver3");
 
@@ -286,9 +287,18 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver5");
 
+        /*
+        if (results.Any())
+        {
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver6");
+
+            return true;
+        }
+        */
+
         foreach (RaycastResult result in results)
         {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"result is {result}");
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"result {result.gameObject.name}");
 
             SCardController cont = result.gameObject.GetComponent<SCardController>();
 
@@ -299,6 +309,7 @@ public class CallSkill : MonoBehaviourPunCallbacks
                 return true;
             }
         }
+        
 
         return false;
     }
