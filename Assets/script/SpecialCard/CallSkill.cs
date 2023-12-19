@@ -271,9 +271,23 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
         PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
 
+        Vector3 worldPosition = targetPanel.position;
+
+        RectTransform canvasRectTransform = GameObject.Find("Canvas").GetComponent<RectTransform>();
+
+        Vector3 localPosition = canvasRectTransform.InverseTransformPoint(worldPosition);
+
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver2");
 
-        pointerEventData.position = targetPanel.position;
+        GameObject nullObject = Instantiate(Resources.Load("Prefab/UsePanel") as GameObject);
+
+        nullObject.transform.SetParent(GameObject.Find("Canvas").transform);
+
+        nullObject.GetComponent<RectTransform>().anchoredPosition = localPosition;
+
+        pointerEventData.position = nullObject.transform.position;
+
+        Destroy(nullObject);
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver3");
 
@@ -281,7 +295,7 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver4");
 
-        graphicRaycaster.Raycast(pointerEventData, results);
+        EventSystem.current.RaycastAll(pointerEventData, results);
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"results.count {results.Count}");
 
