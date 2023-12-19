@@ -79,17 +79,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             photonView.RPC("NextPlayer", PhotonNetwork.PlayerList[0]);
             Debug.Log("start NextPlayer");
         }
-        /*
-        else
-        {
-            ownHand = GameObject.Find("OwnHand").GetComponent<PlayerHand>();
-            twoPHand = GameObject.Find("TwoPField").GetComponent<PlayerHand>();
-            threePHand = GameObject.Find("ThreePHand").GetComponent<PlayerHand>();
-            fourPHand = GameObject.Find("FourPHand").GetComponent<PlayerHand>();
-            field = GameObject.Find("Field").GetComponent<Field>();
-            //photonView.RPC("CrawlOnline", PhotonNetwork.LocalPlayer, 2f);
-        }
-        */
     }
 
     [PunRPC]

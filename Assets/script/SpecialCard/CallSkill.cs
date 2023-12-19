@@ -281,20 +281,11 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver4");
 
-        EventSystem.current.RaycastAll(pointerEventData, results);
+        graphicRaycaster.Raycast(pointerEventData, results);
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"results.count {results.Count}");
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver5");
-
-        /*
-        if (results.Any())
-        {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver6");
-
-            return true;
-        }
-        */
 
         foreach (RaycastResult result in results)
         {
@@ -310,7 +301,6 @@ public class CallSkill : MonoBehaviourPunCallbacks
             }
         }
         
-
         return false;
     }
 
