@@ -287,7 +287,10 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
         pointerEventData.position = nullObject.transform.position;
 
-        Destroy(nullObject);
+        if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
+        {
+            Destroy(nullObject);
+        }
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver3");
 
