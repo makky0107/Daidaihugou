@@ -167,8 +167,8 @@ public class CallSkill : MonoBehaviourPunCallbacks
     public void CallUsePanel()
     {
         //Debug.LogWarning($"<size=18><color=purple>CallUsePanel</color></size>");
-
-        usePanel = PhotonNetwork.Instantiate("Prefab/UsePanel", transform.position, Quaternion.identity).GetComponent<Image>();
+                
+        usePanel = Instantiate(Resources.Load("Prefab/UsePanel") as GameObject).GetComponent<Image>();
         SCardUse panel = usePanel.GetComponent<SCardUse>();
 
         Destroy(usePanel.GetComponent<InterfaceAdjustment>());
