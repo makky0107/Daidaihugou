@@ -458,9 +458,21 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 685062467408240973, guid: 8db1e693684a60d4b9fc18625935e463, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4436549243805786676, guid: 8db1e693684a60d4b9fc18625935e463, type: 3}
       propertyPath: m_Name
       value: SpecialCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517160383680617253, guid: 8db1e693684a60d4b9fc18625935e463, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517160383680617253, guid: 8db1e693684a60d4b9fc18625935e463, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7971390569631626755, guid: 8db1e693684a60d4b9fc18625935e463, type: 3}
       propertyPath: m_Pivot.x
