@@ -123,7 +123,9 @@ public class CallSkill : MonoBehaviourPunCallbacks
         Debug.LogWarning($"<size=24><color=red>InfoForOther {player} Player screenHeight {screenHeight}</color></size>");
 
         atherPanel.gameObject.transform.localPosition = Vector3.zero;
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"uswPanel position x{usePanel.transform.localPosition.x} y{usePanel.transform.localPosition.y}");
         usePanel.gameObject.transform.localPosition = new Vector3(0, -1000f / 2540f * screenHeight, transform.localPosition.z);
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"uswPanel position x{usePanel.transform.localPosition.x} y{usePanel.transform.localPosition.y}");
         sCard.gameObject.transform.localPosition = new Vector3(0, 300f / 2540f * screenHeight, transform.localPosition.z);
 
         MovePanel();
