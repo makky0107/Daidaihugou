@@ -44,6 +44,11 @@ public class CallSkill : MonoBehaviourPunCallbacks
         }
     }
 
+    IEnumerator Crawl(float count)
+    {
+        yield return new WaitForSeconds(count);
+    }
+
     [PunRPC]
     void ReceiveScreenSize(float screenHeight, int playerID)
     {
@@ -77,6 +82,8 @@ public class CallSkill : MonoBehaviourPunCallbacks
         usePanel.gameObject.transform.localPosition = new Vector3(0, -1000f / 2540f * (float)Screen.height, transform.localPosition.z);
         sCard.gameObject.transform.localPosition = new Vector3(0, 300f / 2540f * (float)Screen.height, transform.localPosition.z);
 
+        //StartCoroutine(Crawl(0.8f));
+
         MovePanel();
     }
 
@@ -96,25 +103,11 @@ public class CallSkill : MonoBehaviourPunCallbacks
     public void InfoForOther(int player, int sCardNumber)
     {
         lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther1");
-        Debug.LogWarning($"<size=22><color=orange>InfoForOther1</color></size>");
         CallShadow();
-        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther2");
-        Debug.LogWarning($"<size=22><color=orange>InfoForOther2</color></size>");
         CallSCard(sCardNumber);
-        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther3");
-        Debug.LogWarning($"<size=22><color=orange>InfoForOther3</color></size>");
-        //SCardSetField();
-        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther4");
-        Debug.LogWarning($"<size=22><color=orange>InfoForOther4</color></size>");
         CallOkPanel();
-        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther5");
-        Debug.LogWarning($"<size=22><color=orange>InfoForOther5</color></size>");
         ShadowSetInfo();
-        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther6");
-        Debug.LogWarning($"<size=22><color=orange>InfoForOther6</color></size>");
         StartCountdown();
-        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther7");
-        Debug.LogWarning($"<size=22><color=orange>InfoForOther7</color></size>");
 
         screenHeight = playerScreenSizes[player];
 
@@ -127,6 +120,8 @@ public class CallSkill : MonoBehaviourPunCallbacks
         usePanel.gameObject.transform.localPosition = new Vector3(0, -1000f / 2540f * screenHeight, transform.localPosition.z);
         lS.photonView.RPC("AddLog", RpcTarget.All, $"uswPanel position x{usePanel.transform.localPosition.x} y{usePanel.transform.localPosition.y}");
         sCard.gameObject.transform.localPosition = new Vector3(0, 300f / 2540f * screenHeight, transform.localPosition.z);
+
+        //StartCoroutine(Crawl(0.8f));
 
         MovePanel();
     }
@@ -279,8 +274,6 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
         Vector3 localPosition = canvasRectTransform.InverseTransformPoint(worldPosition);
 
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver2");
-
         GameObject nullObject = Instantiate(Resources.Load("Prefab/UsePanel") as GameObject);
 
         nullObject.transform.SetParent(GameObject.Find("Canvas").transform);
@@ -294,17 +287,11 @@ public class CallSkill : MonoBehaviourPunCallbacks
             Destroy(nullObject);
         }
 
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver3");
-
         List<RaycastResult> results = new List<RaycastResult>();
-
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver4");
 
         EventSystem.current.RaycastAll(pointerEventData, results);
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"results.count {results.Count}");
-
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver5");
 
         foreach (RaycastResult result in results)
         {
