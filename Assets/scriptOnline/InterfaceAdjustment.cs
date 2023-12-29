@@ -7,6 +7,8 @@ public class InterfaceAdjustment : MonoBehaviour
     [SerializeField]
     private Vector2Int Size;
 
+    public CallSkill cS;
+
     private enum ADJUSTMENT_RULES
     {
         normal,
@@ -32,6 +34,12 @@ public class InterfaceAdjustment : MonoBehaviour
         else
         {
             Debug.LogError("スクリーンサイズに　0　が設定されています");
+        }
+
+        if (cS != null)
+        {
+            cS.workW = _work_w;
+            cS.workH = _work_h;
         }
 
         _pos.x *= _work_w;

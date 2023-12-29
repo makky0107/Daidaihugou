@@ -1115,6 +1115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!1 &367688556
 GameObject:
@@ -1376,7 +1377,8 @@ MonoBehaviour:
   screenHeight: 0
   playerScreenSizes: []
   lS: {fileID: 0}
-  graphicRaycaster: {fileID: 0}
+  workW: 0
+  workH: 0
 --- !u!114 &378266036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1475,6 +1477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!61 &440847527
 BoxCollider2D:
@@ -1901,7 +1904,8 @@ MonoBehaviour:
   screenHeight: 0
   playerScreenSizes: []
   lS: {fileID: 0}
-  graphicRaycaster: {fileID: 0}
+  workW: 0
+  workH: 0
 --- !u!114 &602349716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2040,6 +2044,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!1 &750403600
 GameObject:
@@ -2522,6 +2527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!1 &969100642
 GameObject:
@@ -2921,6 +2927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!1 &1075125419
 GameObject:
@@ -3173,6 +3180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!1 &1180251311
 GameObject:
@@ -3297,6 +3305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!1 &1191981395
 GameObject:
@@ -3685,7 +3694,8 @@ MonoBehaviour:
   screenHeight: 0
   playerScreenSizes: []
   lS: {fileID: 0}
-  graphicRaycaster: {fileID: 0}
+  workW: 0
+  workH: 0
 --- !u!114 &1364967666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4107,6 +4117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!1 &1562134409
 GameObject:
@@ -4221,6 +4232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!1 &1577924069
 GameObject:
@@ -4479,6 +4491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 1997902477}
   AdjType: 1
 --- !u!1 &1735884324
 GameObject:
@@ -4886,6 +4899,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!1 &1840820651
 GameObject:
@@ -5036,6 +5050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 1
 --- !u!1 &1855018759
 GameObject:
@@ -5581,7 +5596,8 @@ MonoBehaviour:
   screenHeight: 0
   playerScreenSizes: []
   lS: {fileID: 0}
-  graphicRaycaster: {fileID: 1525557984}
+  workW: 0
+  workH: 0
 --- !u!114 &1997902480
 MonoBehaviour:
   m_ObjectHideFlags: 0

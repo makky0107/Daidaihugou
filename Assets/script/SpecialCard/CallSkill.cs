@@ -29,7 +29,8 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
     public LoggerScroll lS;
 
-    public GraphicRaycaster graphicRaycaster;
+    public float workW;
+    public float workH;
 
     private void Awake()
     {
@@ -82,9 +83,11 @@ public class CallSkill : MonoBehaviourPunCallbacks
         usePanel.gameObject.transform.localPosition = new Vector3(0, -1000f / 2540f * (float)Screen.height, transform.localPosition.z);
         sCard.gameObject.transform.localPosition = new Vector3(0, 300f / 2540f * (float)Screen.height, transform.localPosition.z);
 
-        //StartCoroutine(Crawl(0.8f));
-
-        MovePanel();
+        if ((float)Screen.height < 1001f)
+        {
+            usePanel.gameObject.transform.localPosition -= Vector3.up * 130;
+            sCard.gameObject.transform.localPosition += Vector3.up * 70;
+        }
     }
 
     public void SkillDestroy()
@@ -116,14 +119,14 @@ public class CallSkill : MonoBehaviourPunCallbacks
         Debug.LogWarning($"<size=24><color=red>InfoForOther {player} Player screenHeight {screenHeight}</color></size>");
 
         atherPanel.gameObject.transform.localPosition = Vector3.zero;
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"uswPanel position x{usePanel.transform.localPosition.x} y{usePanel.transform.localPosition.y}");
         usePanel.gameObject.transform.localPosition = new Vector3(0, -1000f / 2540f * screenHeight, transform.localPosition.z);
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"uswPanel position x{usePanel.transform.localPosition.x} y{usePanel.transform.localPosition.y}");
         sCard.gameObject.transform.localPosition = new Vector3(0, 300f / 2540f * screenHeight, transform.localPosition.z);
 
-        //StartCoroutine(Crawl(0.8f));
-
-        MovePanel();
+        if ((float)Screen.height < 1001f)
+        {
+            usePanel.gameObject.transform.localPosition -= Vector3.up * 130;
+            sCard.gameObject.transform.localPosition += Vector3.up * 70;
+        }
     }
 
     [PunRPC]
@@ -175,6 +178,17 @@ public class CallSkill : MonoBehaviourPunCallbacks
         panel.sCard = sCard;
         panel.activate = activate;
         panel.sCardNo = sCardNo;
+
+        float _adj = 0;
+        if (workW < workH)
+        {
+            _adj = workW;
+        }
+        else
+        {
+            _adj = workH;
+        }
+        usePanel.transform.localScale /= _adj;
     }
 
     [PunRPC]
@@ -189,6 +203,17 @@ public class CallSkill : MonoBehaviourPunCallbacks
         Destroy(usePanel.GetComponent<InterfaceAdjustment>());
 
         usePanel.gameObject.transform.SetParent(atherPanel.transform, false);
+
+        float _adj = 0;
+        if (workW < workH)
+        {
+            _adj = workW;
+        }
+        else
+        {
+            _adj = workH;
+        }
+        usePanel.transform.localScale /= _adj;
     }
 
     [PunRPC]
@@ -348,51 +373,17 @@ public class CallSkill : MonoBehaviourPunCallbacks
             yield return new WaitForSeconds(1);
             time--;
             countText.text = time.ToString();
+            GameManager.instance.StopCoroutine(CountDown());
         }
 
-        photonView.RPC("Ready", PhotonNetwork.LocalPlayer);
+        Ready();
     }
 
     [PunRPC]
     public void Ready()
     {
-        photonView.RPC("SkillReadyPlus", RpcTarget.All);
+        SkillDestroy();
 
-        photonView.RPC("SkillDestroy", PhotonNetwork.LocalPlayer);
-
-        StartCoroutine(SuccessionCarwl(0.5f));
-    }
-
-    IEnumerator SuccessionCarwl(float count)
-    {
-        while (true)
-        {
-            if (skillReady < PhotonNetwork.PlayerList.Length - 1)
-            {
-                GameManager.instance.StopCoroutine(CountDown());
-
-                yield return new WaitForSeconds(count);
-            }
-            else
-            {
-                GameManager.instance.StartCoroutine(CountDown());
-
-                photonView.RPC("SikllReadyReset", RpcTarget.All);
-
-                break;
-            }
-        }
-    }
-
-    [PunRPC]
-    void SkillReadyPlus()
-    {
-        skillReady++;
-    }
-
-    [PunRPC]
-    void SikllReadyReset()
-    {
-        skillReady = 0;
+        GameManager.instance.StartCoroutine(CountDown());
     }
 }
