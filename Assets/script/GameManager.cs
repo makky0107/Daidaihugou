@@ -824,7 +824,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             countText.text = time.ToString();
         }
 
-        photonView.RPC("OnPass", PhotonNetwork.PlayerList[0]);
+        photonView.RPC("OnPass", PhotonNetwork.LocalPlayer);
     }
 
     [PunRPC]

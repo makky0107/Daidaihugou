@@ -52,20 +52,20 @@ public class CallSkill : MonoBehaviourPunCallbacks
     [PunRPC]
     void ReceiveScreenSize(float screenHeight, int playerID)
     {
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"{playerID} Player screenHeight {screenHeight}");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"{playerID} Player screenHeight {screenHeight}");
 
-        Debug.LogWarning($"<size=24><color=red>{playerID} Player screenHeight {screenHeight}</color></size>");
+        //Debug.LogWarning($"<size=24><color=red>{playerID} Player screenHeight {screenHeight}</color></size>");
         playerScreenSizes[playerID] = screenHeight;
-        Debug.LogWarning($"<size=24><color=red>playerScreenSizes[{playerID}]screenHeight {playerScreenSizes[playerID]}</color></size>");
+        //Debug.LogWarning($"<size=24><color=red>playerScreenSizes[{playerID}]screenHeight {playerScreenSizes[playerID]}</color></size>");
 
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"playerScreenSizes[{playerID}]screenHeight {playerScreenSizes[playerID]}");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"playerScreenSizes[{playerID}]screenHeight {playerScreenSizes[playerID]}");
     }
 
     public void SkillActivation()
     {
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"SkillActivation");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"SkillActivation");
 
-        Debug.LogWarning($"<size=18><color=purple>SkillActivation</color></size>");
+        //Debug.LogWarning($"<size=18><color=purple>SkillActivation</color></size>");
 
         CallShadow();
         HideCountText();
@@ -73,8 +73,8 @@ public class CallSkill : MonoBehaviourPunCallbacks
         CallActivateOBJ();
         CallUsePanel();
         photonView.RPC("DestroyUsePanel", RpcTarget.Others);
-        SCardSetField();
-        SCardSetHand();
+        photonView.RPC("SCardSetField", RpcTarget.All);
+        photonView.RPC("SCardSetHand", RpcTarget.All);
         SCardSetThis();
         ShadowSetInfo();
         ShadowSetAct();
@@ -113,9 +113,9 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
         screenHeight = playerScreenSizes[player];
 
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther {player} Player screenHeight {screenHeight}");
-
-        Debug.LogWarning($"<size=24><color=red>InfoForOther {player} Player screenHeight {screenHeight}</color></size>");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther {player} Player screenHeight {screenHeight}");
+        
+        //Debug.LogWarning($"<size=24><color=red>InfoForOther {player} Player screenHeight {screenHeight}</color></size>");
 
         atherPanel.gameObject.transform.localPosition = Vector3.zero;
         usePanel.gameObject.transform.localPosition = new Vector3(0, -1000f / 2540f * screenHeight, transform.localPosition.z);
@@ -258,80 +258,6 @@ public class CallSkill : MonoBehaviourPunCallbacks
         activate.call = this;
 
         //Debug.LogWarning($"<size=24><color=red>activate.call {activate.call}</color></size>");
-    }
-
-    public void MovePanel()
-    {
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel1");
-
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"usePanel is {usePanel}");
-
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel Is {IsOver(usePanel.GetComponent<RectTransform>())}");
-
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel2");
-
-        if (IsOver(usePanel.GetComponent<RectTransform>()))
-        {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel3");
-
-            usePanel.transform.localPosition -= Vector3.up * 20;
-            MovePanel();
-        }
-        else
-        {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"MovePanel4");
-
-            return;
-        }
-    }
-
-    [PunRPC]
-    public bool IsOver(RectTransform targetPanel)
-    {
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver1");
-
-        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-
-        Vector3 worldPosition = targetPanel.position;
-
-        RectTransform canvasRectTransform = GameObject.Find("Canvas").GetComponent<RectTransform>();
-
-        Vector3 localPosition = canvasRectTransform.InverseTransformPoint(worldPosition);
-
-        GameObject nullObject = Instantiate(Resources.Load("Prefab/UsePanel") as GameObject);
-
-        nullObject.transform.SetParent(GameObject.Find("Canvas").transform);
-
-        nullObject.GetComponent<RectTransform>().anchoredPosition = localPosition;
-
-        pointerEventData.position = nullObject.transform.position;
-
-        if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
-        {
-            Destroy(nullObject);
-        }
-
-        List<RaycastResult> results = new List<RaycastResult>();
-
-        EventSystem.current.RaycastAll(pointerEventData, results);
-
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"results.count {results.Count}");
-
-        foreach (RaycastResult result in results)
-        {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"result {result.gameObject.name}");
-
-            SCardController cont = result.gameObject.GetComponent<SCardController>();
-
-            if (cont != null)
-            {
-                lS.photonView.RPC("AddLog", RpcTarget.All, $"IsOver6");
-
-                return true;
-            }
-        }
-        
-        return false;
     }
 
     [PunRPC]

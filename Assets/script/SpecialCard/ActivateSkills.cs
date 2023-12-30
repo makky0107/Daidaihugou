@@ -25,19 +25,19 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
             photonView.RPC("ADeclarationOfWar", RpcTarget.All);
         }
 
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"call {call}");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"call {call}");
 
         Debug.LogWarning($"<size=24><color=red>call {call}</color></size>");
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"i = {i}");
+            //lS.photonView.RPC("AddLog", RpcTarget.All, $"i = {i}");
 
             Debug.LogWarning($"<size=22><color=orange>i = {i}</color></size>");
 
             if (i != PhotonNetwork.LocalPlayer.ActorNumber - 1)
             {
-                lS.photonView.RPC("AddLog", RpcTarget.All, $"Judge Info Act");
+                //lS.photonView.RPC("AddLog", RpcTarget.All, $"Judge Info Act");
 
                 Debug.LogWarning($"<size=22><color=orange>Judge Info Act</color></size>");
 
@@ -49,6 +49,10 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     [PunRPC]
     public void ADeclarationOfWar()
     {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player field {field}");
+
         field.upsideDown = !field.upsideDown;
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player upsideDown {field.upsideDown}");
     }
 }
