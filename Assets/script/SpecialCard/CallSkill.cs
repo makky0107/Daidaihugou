@@ -15,7 +15,6 @@ public class CallSkill : MonoBehaviourPunCallbacks
     public Field field;
     public int sCardNo;
 
-    public Text countText;
     public int time;
     public int skillReady;
 
@@ -110,7 +109,7 @@ public class CallSkill : MonoBehaviourPunCallbacks
         CallSCard(sCardNumber);
         CallOkPanel();
         ShadowSetInfo();
-        StartCountdown();
+        atherPanel.GetComponent<CallSkill>().StartCountdown();
 
         screenHeight = playerScreenSizes[player];
 
@@ -366,13 +365,14 @@ public class CallSkill : MonoBehaviourPunCallbacks
     IEnumerator CountDown()
     {
         time = 60;
-        countText.text = time.ToString();
+        Text text = GetComponentInChildren<Text>();
+        text.text = time.ToString();
 
         while (time > 0)
         {
             yield return new WaitForSeconds(1);
             time--;
-            countText.text = time.ToString();
+            text.text = time.ToString();
             GameManager.instance.StopCoroutine(CountDown());
         }
 
