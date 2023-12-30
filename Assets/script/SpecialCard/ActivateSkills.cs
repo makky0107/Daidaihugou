@@ -46,9 +46,16 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         }
     }
 
+    public void GetField()
+    {
+        field = GameObject.Find("Field").GetComponent<Field>();
+    }
+
     [PunRPC]
     public void ADeclarationOfWar()
     {
+        GetField();
+
         lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player field {field}");
 
         field.upsideDown = !field.upsideDown;
