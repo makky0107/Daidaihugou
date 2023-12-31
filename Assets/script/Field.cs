@@ -368,7 +368,7 @@ public class Field : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void ResetFild()
+    public void ResetField()
     {
         waitingCards.Clear();
         waitingCards.AddRange(cards);
@@ -377,7 +377,16 @@ public class Field : MonoBehaviourPunCallbacks
 
         foreach (var card in waitingCards)
         {
-            PhotonNetwork.Destroy(card.gameObject);
+            PhotonView view = card.gameObject.GetComponent<PhotonView>();
+
+            if (view != null && view.ViewID != 0)
+            {
+                PhotonNetwork.Destroy(card.gameObject);
+            }
+            else
+            {
+                Destroy(card.gameObject);
+            }
         }
     }
 

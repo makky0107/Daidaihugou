@@ -47,7 +47,16 @@ public class PlayerHand : MonoBehaviourPunCallbacks
         {
             if (card.isSelected)
             {
-                card.photonView.RPC("OnSelectedCard", PhotonNetwork.LocalPlayer);
+                PhotonView view = card.gameObject.GetComponent<PhotonView>();
+
+                if (view != null && view.ViewID != 0)
+                {
+                    card.photonView.RPC("OnSelectedCard", PhotonNetwork.LocalPlayer);
+                }
+                else
+                {
+                    card.OnSelectedCard();
+                }
             }
         }
     }

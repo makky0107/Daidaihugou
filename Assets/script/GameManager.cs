@@ -534,7 +534,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            field.photonView.RPC("ResetFild", PhotonNetwork.PlayerList[i]);
+            field.photonView.RPC("ResetField", PhotonNetwork.PlayerList[i]);
 
             photonView.RPC("FieldArrange", PhotonNetwork.PlayerList[i]);
 

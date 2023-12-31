@@ -7,8 +7,14 @@ using Photon.Realtime;
 public class ActivateSkills : MonoBehaviourPunCallbacks
 {
     public Field field;
-    public PlayerHand hand;
+
+    public PlayerHand ownHand;
+
+
     public CallSkill call;
+
+    public int currentIndex;
+    public int playerIndex;
 
     public LoggerScroll lS;
 
@@ -51,6 +57,11 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         field = GameObject.Find("Field").GetComponent<Field>();
     }
 
+    public void GetOwnHand()
+    {
+        ownHand = GameObject.Find("OwnHand").GetComponent<PlayerHand>();
+    }
+
     [PunRPC]
     public void ADeclarationOfWar()
     {
@@ -59,6 +70,8 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player field {field}");
 
         field.upsideDown = !field.upsideDown;
+
+        field.Judge(PhotonNetwork.LocalPlayer.ActorNumber - 1);
 
         lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player upsideDown {field.upsideDown}");
     }
