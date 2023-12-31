@@ -444,6 +444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1170, y: 2540}
+  cS: {fileID: 0}
   AdjType: 0
 --- !u!1001 &1273930951
 PrefabInstance:

@@ -681,6 +681,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log($"<size=24><color=red>TurnChenge{currentPlayerIndex}</color></size>");
 
+        Photon.Realtime.Player player = PhotonNetwork.LocalPlayer;
+        player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "currentPlayerIndex", currentPlayerIndex } });
+
         GameObject twoPObj = GameObject.Find("TwoPHand");
         CPUAI twoPCPUAI = twoPObj.GetComponent<CPUAI>();
         GameObject threePObj = GameObject.Find("ThreePHand");

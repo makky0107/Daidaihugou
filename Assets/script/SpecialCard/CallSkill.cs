@@ -245,7 +245,7 @@ public class CallSkill : MonoBehaviourPunCallbacks
     {
         //Debug.LogWarning($"<size=18><color=purple>SCardSetHand</color></size>");
 
-        activate.hand = GetComponent<PlayerHand>();
+        activate.ownHand = GetComponent<PlayerHand>();
 
         //Debug.LogWarning($"<size=24><color=red>activate.hand{activate.hand}</color></size>");
     }
