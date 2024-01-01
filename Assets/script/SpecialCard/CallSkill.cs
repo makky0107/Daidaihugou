@@ -72,7 +72,7 @@ public class CallSkill : MonoBehaviourPunCallbacks
         CallSCard(sCardNo);
         CallActivateOBJ();
         CallUsePanel();
-        photonView.RPC("DestroyUsePanel", RpcTarget.Others);
+        //photonView.RPC("DestroyUsePanel", RpcTarget.Others);
         //photonView.RPC("SCardSetField", RpcTarget.All);
         //photonView.RPC("SCardSetHand", RpcTarget.All);
         SCardSetThis();

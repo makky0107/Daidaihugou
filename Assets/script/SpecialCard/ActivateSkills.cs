@@ -19,6 +19,8 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
     public int index;
 
+    public Text text;
+
     public LoggerScroll lS;
 
     private void Start()
@@ -39,18 +41,30 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         return index == currentIndex;
     }
 
-    IEnumerator Crawl(float count)
+    public void CannotInfo()
     {
-        yield return new WaitForSeconds(count);
+        text = Instantiate(Resources.Load("Prefab/InfoText")).GetComponent<Text>();
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}player text {text.gameObject.name}");
+
+        text.transform.SetParent(GameObject.Find("Canvas").transform, false);
+        text.transform.localPosition = Vector3.zero;
+        text.text = "今は使用できません";
+
+        StartCoroutine(FadeOut(text));
     }
 
     IEnumerator FadeOut(Text text)
     {
+        yield return new WaitForSeconds(1);
+
         for (float t = 0.01f; t < 1f; t += Time.deltaTime)
         {
             text.color = new Color(text.color.r, text.color.g, text.color.b, Mathf.Lerp(1, 0, t / 1f));
             yield return null;
         }
+
+        Destroy(text.gameObject);
     }
 
     [PunRPC]
@@ -72,20 +86,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
             }
             else
             {
-                Text text = Instantiate(Resources.Load("Prefab/InfoText")).GetComponent<Text>();
-
-                lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}player text {text.gameObject.name}");
-
-                text.transform.SetParent(GameObject.Find("Canvas").transform, false);
-                text.text = "今は使用できません";
-
-
-
-                StartCoroutine(Crawl(1f));
-
-                StartCoroutine(FadeOut(text));
-
-                Destroy(text.gameObject);
+                CannotInfo();
             }
         }
 
