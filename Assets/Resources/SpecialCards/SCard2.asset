@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7210efb6ff467894db7a37658735038d, type: 3}
   m_Name: SCard2
   m_EditorClassIdentifier: 
-  sCardNo: 0
-  image: {fileID: 0}
-  title: 
-  text: 
+  sCardNo: 2
+  image: {fileID: 21300000, guid: 05954013f716e6541a952844c157a69e, type: 3}
+  title: "\u5927\u30B5\u30FC\u30AB\u30B9"
+  text: "\u30B8\u30E7\u30FC\u30AB\u30FC\u3092\uFF12\u679A\u8FFD\u52A0\u3059\u308B\u3002"
