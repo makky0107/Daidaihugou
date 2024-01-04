@@ -309,7 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63dda2a84a0c7944bb5e871687405b42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IconImage: {fileID: 0}
+  IconImage: {fileID: 3720400859671997489}
   selectablePanel: {fileID: 0}
 --- !u!1 &6351380503447660081
 GameObject:
