@@ -21,5 +21,6 @@ public class SCIconController : MonoBehaviour
     {
         model = new SCIconModel(iconID);
         view.Show(model);
+        view.SetActiveSelectPanel(false);
     }
 }
