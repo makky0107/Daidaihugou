@@ -6,6 +6,7 @@ public class SCIconController : MonoBehaviour
 {
     public int iconID;
 
+    SkillGroup parent;
     SCIconView view;
     public SCIconModel model;
 
@@ -21,6 +22,17 @@ public class SCIconController : MonoBehaviour
     {
         model = new SCIconModel(iconID);
         view.Show(model);
+        view.SetActiveSelectPanel(false);
+        parent = GetComponentInParent<SkillGroup>();
+    }
+
+    public void SelectIcon()
+    {
+        view.SetActiveSelectPanel(true);
+    }
+    
+    public void SelectCanselIcon()
+    {
         view.SetActiveSelectPanel(false);
     }
 }
