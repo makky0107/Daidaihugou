@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SkillGroup : MonoBehaviour
 {
-    private List<GameObject> skills = new List<GameObject>();
+    public List<GameObject> skills = new List<GameObject>();
 
     void Start()
     {

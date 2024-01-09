@@ -26,6 +26,15 @@ public class SCIconController : MonoBehaviour
         parent = GetComponentInParent<SkillGroup>();
     }
 
+    public void SelectOntap()
+    {
+        foreach (var icon in parent.skills)
+        {
+            icon.GetComponent<SCIconController>().SelectCanselIcon();
+        }
+        SelectIcon();
+    }
+
     public void SelectIcon()
     {
         view.SetActiveSelectPanel(true);
