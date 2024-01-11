@@ -6,12 +6,19 @@ using UnityEngine.SceneManagement;
 // MonoBehaviourPunCallbacksを継承して、PUNのコールバックを受け取れるようにする
 public class PlayStart : MonoBehaviour
 {
+    public static PlayStart instance;
     public int sCardNo;
+
+    public void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
     public void PlayStartButton()
     {
-        sCardNo = 0;
-
         PlayerPrefs.SetInt("SCardKey", sCardNo);
         PlayerPrefs.Save();
 

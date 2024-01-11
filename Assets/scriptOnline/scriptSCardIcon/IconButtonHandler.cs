@@ -8,6 +8,8 @@ public class IconButtonHandler : MonoBehaviour
     private bool isPressed = false;
     private float pressTime = 0f;
 
+    public SCardCallFromIcon SCallIcon;
+
     public void OnPointerDown()
     {
         isPressed = true;
@@ -29,11 +31,11 @@ public class IconButtonHandler : MonoBehaviour
 
     private void ShortPress()
     {
-        // ƒ^ƒbƒv‚Ìˆ—
+        SCallIcon.SkillSelct();
     }
 
     private void LongPress()
     {
-        // ’·‰Ÿ‚µ‚Ìˆ—
+        SCallIcon.SkillActivation();
     }
 }

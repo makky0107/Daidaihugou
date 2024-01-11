@@ -8,17 +8,41 @@ public class SCardCallFromIcon : MonoBehaviour
     public Image atherPanel;
     public Image usePanel;
     public SCardController sCard;
+    public SCIconController SCIconCont;
 
     public float workW;
     public float workH;
 
-    public void SkillActivation(int sCardID)
+    public void SkillActivation()
     {
         CallShadow();
         HideCountText();
-        CallSCard(sCardID);
+        CallSCard(SCIconCont.iconID);
         CallOkPanel();
         ShadowSetInfo();
+
+        atherPanel.gameObject.transform.localPosition = Vector3.zero;
+        usePanel.gameObject.transform.localPosition = new Vector3(0, -1000f / 2540f * (float)Screen.height, transform.localPosition.z);
+        sCard.gameObject.transform.localPosition = new Vector3(0, 300f / 2540f * (float)Screen.height, transform.localPosition.z);
+
+        if ((float)Screen.height < 1001f)
+        {
+            usePanel.gameObject.transform.localPosition -= Vector3.up * 130;
+            sCard.gameObject.transform.localPosition += Vector3.up * 70;
+        }
+    }
+
+    public void SkillSelct()
+    {
+        PlayStart.instance.sCardNo = SCIconCont.iconID;
+        SCIconCont.SelectOntap();
+    }
+
+    public void SkillDestroy()
+    {
+        DestroyShadow();
+        DestroyUsePanel();
+        DestroySkillCard();
     }
 
     public void CallShadow()
