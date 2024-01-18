@@ -19,7 +19,7 @@ public class IconButtonHandler : MonoBehaviour
     public void OnPointerUp()
     {
         isPressed = false;
-        if (Time.time - pressTime >= 1f)
+        if (Time.time - pressTime >= 0.3f)
         {
             LongPress();
         }

@@ -33,7 +33,10 @@ public class CallSkill : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        lS = GameObject.Find("Log").GetComponent<LoggerScroll>();
+        if (GameObject.Find("Log") != null)
+        {
+            lS = GameObject.Find("Log").GetComponent<LoggerScroll>();
+        }
 
         playerScreenSizes = new List<float>() { 0f, 0f, 0f, 0f};
 
@@ -104,7 +107,7 @@ public class CallSkill : MonoBehaviourPunCallbacks
     [PunRPC]
     public void InfoForOther(int player, int sCardNumber)
     {
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther1");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"InfoForOther1");
         CallShadow();
         CallSCard(sCardNumber);
         CallOkPanel();

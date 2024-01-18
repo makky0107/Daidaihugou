@@ -44,7 +44,7 @@ public class SCardCallFromIcon : MonoBehaviour
 
     public void CallShadow()
     {
-        Debug.LogWarning($"<size=18><color=purple>CallShadow</color></size>");
+        //Debug.LogWarning($"<size=18><color=purple>CallShadow</color></size>");
 
         atherPanel = Instantiate(Resources.Load("Prefab/SkillAtherPanel") as GameObject).GetComponent<Image>();
 
@@ -78,6 +78,8 @@ public class SCardCallFromIcon : MonoBehaviour
         use.atherPanel = atherPanel;
         use.usePanel = usePanel;
 
+        Debug.Log($"usePanel {usePanel.gameObject}");
+
         Destroy(usePanel.GetComponent<InterfaceAdjustment>());
 
         usePanel.gameObject.transform.SetParent(atherPanel.transform, false);
@@ -94,12 +96,12 @@ public class SCardCallFromIcon : MonoBehaviour
         {
             _adj = workH;
         }
-        usePanel.transform.localScale /= _adj;
+        usePanel.transform.localScale *= _adj;
     }
 
     public void ShadowSetInfo()
     {
-        Debug.LogWarning($"<size=18><color=purple>ShadowSetInfo</color></size>");
+        //Debug.LogWarning($"<size=18><color=purple>ShadowSetInfo</color></size>");
 
         CallSkill ather = atherPanel.GetComponent<CallSkill>();
         ather.sCard = sCard;
