@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class InterfaceAdjustment : MonoBehaviour
 {
-    private Vector2Int Size;
+    [SerializeField] Vector2Int Size;
 
     public CallSkill cS;
-    [SerializeField] SCardCallFromIcon sCFromIcon;
 
     private enum ADJUSTMENT_RULES
     {
@@ -40,11 +39,6 @@ public class InterfaceAdjustment : MonoBehaviour
         {
             cS.workW = _work_w;
             cS.workH = _work_h;
-        }
-        if (sCFromIcon)
-        {
-            sCFromIcon.workW = _work_w;
-            sCFromIcon.workW = _work_h;
         }
 
         _pos.x *= _work_w;

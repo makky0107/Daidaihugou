@@ -10,9 +10,6 @@ public class SCardCallFromIcon : MonoBehaviour
     public SCardController sCard;
     public SCIconController SCIconCont;
 
-    public float workW;
-    public float workH;
-
     public void SkillActivation()
     {
         CallShadow();
@@ -84,6 +81,9 @@ public class SCardCallFromIcon : MonoBehaviour
         Destroy(usePanel.GetComponent<InterfaceAdjustment>());
 
         usePanel.gameObject.transform.SetParent(atherPanel.transform, false);
+
+        float workW = (float)Screen.width;
+        float workH = (float)Screen.height;
 
         float _adj = 0;
         if (workW < workH)
