@@ -84,8 +84,8 @@ public class SCardCallFromIcon : MonoBehaviour
 
         usePanel.gameObject.transform.SetParent(atherPanel.transform, false);
 
-        float workW = (float)Screen.width;
-        float workH = (float)Screen.height;
+        float workW = (float)Screen.width / 1170f;
+        float workH = (float)Screen.height / 2540f;
 
         float _adj = 0;
         if (workW < workH)
@@ -96,7 +96,7 @@ public class SCardCallFromIcon : MonoBehaviour
         {
             _adj = workH;
         }
-        usePanel.transform.localScale *= _adj;
+        usePanel.transform.localScale /= _adj;
     }
 
     public void ShadowSetInfo()

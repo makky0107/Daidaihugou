@@ -313,6 +313,9 @@ public class CallSkill : MonoBehaviourPunCallbacks
     {
         SkillDestroy();
 
-        GameManager.instance.StartCoroutine(CountDown());
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.StartCoroutine(CountDown());
+        }
     }
 }
