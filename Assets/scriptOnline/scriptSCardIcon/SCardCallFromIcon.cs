@@ -32,6 +32,7 @@ public class SCardCallFromIcon : MonoBehaviour
     public void SkillSelct()
     {
         PlayStart.instance.sCardNo = SCIconCont.iconID;
+        //Debug.Log($"PlayStart.instance.sCardNo {PlayStart.instance.sCardNo}");
         SCIconCont.SelectOntap();
     }
 

@@ -25,7 +25,10 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        lS = GameObject.Find("Log").GetComponent<LoggerScroll>();
+        if (GameObject.Find("Log") != null)
+        {
+            lS = GameObject.Find("Log").GetComponent<LoggerScroll>();
+        }
     }
 
     public bool IndexJudge(int currentIndex)
@@ -74,11 +77,17 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
         if (sCardNo == 0)
         {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}player");
+            if (lS != null)
+            {
+                lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}player");
+            }
 
             if (IndexJudge(PhotonNetwork.LocalPlayer.ActorNumber - 1))
             {
-                lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}player index {index}");
+                if (lS != null)
+                {
+                    lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}player index {index}");
+                }
 
                 photonView.RPC("ADeclarationOfWar", RpcTarget.All);
 
