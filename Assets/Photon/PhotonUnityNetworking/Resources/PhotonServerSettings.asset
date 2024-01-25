@@ -186,6 +186,7 @@ MonoBehaviour:
   - ReceiveScreenSize
   - AddLog
   - IsOver
+  - GraveRobbing
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

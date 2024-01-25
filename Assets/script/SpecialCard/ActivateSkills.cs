@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class ActivateSkills : MonoBehaviourPunCallbacks
 {
@@ -91,6 +92,24 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
                 photonView.RPC("ADeclarationOfWar", RpcTarget.All);
 
+                SkillButtonDestroy();
+
+                indexMatch = true;
+            }
+            else
+            {
+                CannotInfo();
+            }
+        }
+
+        if (sCardNo == 1)
+        {
+            if (IndexJudge(PhotonNetwork.LocalPlayer.ActorNumber - 1))
+            {
+
+
+                SkillButtonDestroy();
+
                 indexMatch = true;
             }
             else
@@ -130,17 +149,34 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         ownHand = GameObject.Find("OwnHand").GetComponent<PlayerHand>();
     }
 
+    public void SkillButtonDestroy()
+    {
+        Destroy(GameObject.Find("SkillButton"));
+    }
+
     [PunRPC]
     public void ADeclarationOfWar()
     {
         GetField();
 
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player field {field}");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player field {field}");
 
         field.upsideDown = !field.upsideDown;
 
         field.Judge(PhotonNetwork.LocalPlayer.ActorNumber - 1);
 
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player upsideDown {field.upsideDown}");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player upsideDown {field.upsideDown}");
+    }
+
+    [PunRPC]
+    public void GraveRobbing()
+    {
+        GetField();
+        GetOwnHand();
+
+        ownHand.allCards.AddRange(field.cards);
+        ownHand.allCards.OrderBy(x => x.model.Strenge).OrderBy(x => x.model.Suit);
+
+        field.Judge(PhotonNetwork.LocalPlayer.ActorNumber - 1);
     }
 }
