@@ -154,6 +154,17 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         Destroy(GameObject.Find("SkillButton"));
     }
 
+    public void CardOderOwnHand(PlayerHand hand)
+    {
+        for (int i = 0; i < hand.allCards.Count; i++)
+        {
+            int posX = i * 60;
+            int posXToCenter = hand.allCards.Count * 28;
+            hand.allCards[i].transform.localPosition = new Vector3(posX - posXToCenter, 0);
+            hand.allCards[i].transform.SetSiblingIndex(i);
+        }
+    }
+
     [PunRPC]
     public void ADeclarationOfWar()
     {
@@ -175,8 +186,37 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         GetOwnHand();
 
         ownHand.allCards.AddRange(field.cards);
+        for (int i = 0; i < field.cards.Count; i++)
+        {
+            field.cards[i].transform.SetParent(ownHand.transform, false);
+        }
+
         ownHand.allCards.OrderBy(x => x.model.Strenge).OrderBy(x => x.model.Suit);
 
+        field.cards.AddRange(field.waitingCards);
+        foreach (var card in field.waitingCards)
+        {
+            CardController body = Instantiate(Resources.Load("Prefab/Card")).GetComponent<CardController>();
+
+            body.transform.SetParent(field.transform, false);
+            body.Init(card.model.ID);
+        }
+
+
         field.Judge(PhotonNetwork.LocalPlayer.ActorNumber - 1);
+    }
+
+    [PunRPC]
+    public void GraveRobbingForOther(int player)
+    {
+        GetField();
+
+        int index = GameManager.instance.otherActors.IndexOf(player);
+
+        GameManager.instance.otherHnands[index].GetComponent<PlayerHand>().allCards.AddRange(field.cards);
+        for (int i = 0; i < field.cards.Count; i++)
+        {
+            field.cards[i].transform.SetParent(GameManager.instance.otherHnands[index]);
+        }
     }
 }

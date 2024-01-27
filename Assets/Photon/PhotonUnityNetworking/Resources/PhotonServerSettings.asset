@@ -187,6 +187,7 @@ MonoBehaviour:
   - AddLog
   - IsOver
   - GraveRobbing
+  - GraveRobbingForOther
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
