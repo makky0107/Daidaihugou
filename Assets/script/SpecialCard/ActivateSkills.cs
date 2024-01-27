@@ -156,6 +156,8 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
     public void CardOderOwnHand(PlayerHand hand)
     {
+        hand.allCards.OrderBy(x => x.model.Suit).OrderBy(x => x.model.Strenge);
+
         for (int i = 0; i < hand.allCards.Count; i++)
         {
             int posX = i * 60;
@@ -191,7 +193,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
             field.cards[i].transform.SetParent(ownHand.transform, false);
         }
 
-        ownHand.allCards.OrderBy(x => x.model.Strenge).OrderBy(x => x.model.Suit);
+        
 
         field.cards.AddRange(field.waitingCards);
         foreach (var card in field.waitingCards)
