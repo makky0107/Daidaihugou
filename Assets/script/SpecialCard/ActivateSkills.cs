@@ -106,7 +106,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         {
             if (IndexJudge(PhotonNetwork.LocalPlayer.ActorNumber - 1))
             {
-
+                GraveRobbing();
 
                 SkillButtonDestroy();
 
@@ -167,6 +167,46 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         }
     }
 
+    public void CardOrderOtherHand(PlayerHand hand)
+    {
+        hand.allCards.OrderBy(x => x.model.Suit).OrderBy(x => x.model.Strenge);
+
+        for (int i = 0; i < hand.allCards.Count; i++)
+        {
+            int posX = i * 20;
+            int posXToCenter = hand.allCards.Count * 9;
+            hand.allCards[i].transform.localPosition = new Vector3(posX - posXToCenter, 0);
+            hand.allCards[i].transform.localScale = Vector3.one / 3;
+            hand.allCards[i].transform.SetSiblingIndex(i);
+        }
+    }
+
+    public void CardOrderField(Field field)
+    {
+        field.cards = field.cards.OrderBy(x => x.model.Suit).OrderBy(x => x.model.Strenge).ToList();
+
+        for (int i = 0; i < field.cards.Count; i++)
+        {
+            int posX;
+            int posXToCenter;
+            if (field.cards.Count > 1)
+            {
+                posX = i * 75;
+                posXToCenter = field.cards.Count * 40;
+            }
+            else
+            {
+                posX = i * 0;
+                posXToCenter = field.cards.Count * 0;
+            }
+            field.cards[i].transform.localPosition = new Vector3(posX - posXToCenter, 0);
+            field.cards[i].transform.SetSiblingIndex(i);
+            field.cards[i].transform.localScale = new Vector3(1.6f, 1.6f, 1.6f);
+            field.cards[i].isSelected = false;
+            field.cards[i].BackSideNotActive();
+        }
+    }
+
     [PunRPC]
     public void ADeclarationOfWar()
     {
@@ -192,18 +232,17 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         {
             field.cards[i].transform.SetParent(ownHand.transform, false);
         }
+        CardOderOwnHand(ownHand);
 
-        
-
-        field.cards.AddRange(field.waitingCards);
-        foreach (var card in field.waitingCards)
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            CardController body = Instantiate(Resources.Load("Prefab/Card")).GetComponent<CardController>();
-
-            body.transform.SetParent(field.transform, false);
-            body.Init(card.model.ID);
+            if (i != PhotonNetwork.LocalPlayer.ActorNumber - 1)
+            {
+                photonView.RPC("GraveRobbingForOther", PhotonNetwork.PlayerList[i], i);
+            }
         }
 
+        photonView.RPC("WeitingCardsBack", RpcTarget.All);
 
         field.Judge(PhotonNetwork.LocalPlayer.ActorNumber - 1);
     }
@@ -220,5 +259,21 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         {
             field.cards[i].transform.SetParent(GameManager.instance.otherHnands[index]);
         }
+
+        CardOrderOtherHand(GameManager.instance.otherHnands[index].GetComponent<PlayerHand>());
+    }
+
+    [PunRPC]
+    public void WeitingCardsBack()
+    {
+        field.cards.AddRange(field.waitingCards);
+        foreach (var card in field.waitingCards)
+        {
+            CardController body = Instantiate(Resources.Load("Prefab/Card")).GetComponent<CardController>();
+
+            body.transform.SetParent(field.transform, false);
+            body.Init(card.model.ID);
+        }
+        CardOrderField(field);
     }
 }
