@@ -120,19 +120,10 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
         if (indexMatch)
         {
-            //lS.photonView.RPC("AddLog", RpcTarget.All, $"call {call}");
-            //Debug.LogWarning($"<size=24><color=red>call {call}</color></size>");
-
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
-                //lS.photonView.RPC("AddLog", RpcTarget.All, $"i = {i}");
-                //Debug.LogWarning($"<size=22><color=orange>i = {i}</color></size>");
-
                 if (i != PhotonNetwork.LocalPlayer.ActorNumber - 1)
                 {
-                    //lS.photonView.RPC("AddLog", RpcTarget.All, $"Judge Info Act");
-                    //Debug.LogWarning($"<size=22><color=orange>Judge Info Act</color></size>");
-
                     call.photonView.RPC("InfoForOther", PhotonNetwork.PlayerList[i], i, sCardNo);
                 }
             }
@@ -160,6 +151,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
         for (int i = 0; i < hand.allCards.Count; i++)
         {
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}playerHand Strange {hand.allCards[i].model.Strenge} Suit {hand.allCards[i].model.Suit}");
             int posX = i * 60;
             int posXToCenter = hand.allCards.Count * 28;
             hand.allCards[i].transform.localPosition = new Vector3(posX - posXToCenter, 0);
@@ -212,13 +204,9 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     {
         GetField();
 
-        //lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player field {field}");
-
         field.upsideDown = !field.upsideDown;
 
         field.Judge(PhotonNetwork.LocalPlayer.ActorNumber - 1);
-
-        //lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber}player upsideDown {field.upsideDown}");
     }
 
     [PunRPC]
@@ -231,16 +219,12 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         for (int i = 0; i < field.cards.Count; i++)
         {
             field.cards[i].transform.SetParent(ownHand.transform, false);
+            field.cards[i].transform.localScale = Vector3.one / 1.6f;
         }
+        field.cards.Clear();
         CardOderOwnHand(ownHand);
 
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            if (i != PhotonNetwork.LocalPlayer.ActorNumber - 1)
-            {
-                photonView.RPC("GraveRobbingForOther", PhotonNetwork.PlayerList[i], i);
-            }
-        }
+        photonView.RPC("GraveRobbingForOther", RpcTarget.Others, PhotonNetwork.LocalPlayer.ActorNumber);
 
         photonView.RPC("WeitingCardsBack", RpcTarget.All);
 
@@ -257,8 +241,9 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         GameManager.instance.otherHnands[index].GetComponent<PlayerHand>().allCards.AddRange(field.cards);
         for (int i = 0; i < field.cards.Count; i++)
         {
-            field.cards[i].transform.SetParent(GameManager.instance.otherHnands[index]);
+            field.cards[i].transform.SetParent(GameManager.instance.otherHnands[index], false);
         }
+        field.cards.Clear();
 
         CardOrderOtherHand(GameManager.instance.otherHnands[index].GetComponent<PlayerHand>());
     }
