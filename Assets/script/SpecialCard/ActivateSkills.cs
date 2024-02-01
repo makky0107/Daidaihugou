@@ -85,11 +85,6 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
             if (IndexJudge(PhotonNetwork.LocalPlayer.ActorNumber - 1))
             {
-                if (lS != null)
-                {
-                    lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}player index {index}");
-                }
-
                 photonView.RPC("ADeclarationOfWar", RpcTarget.All);
 
                 SkillButtonDestroy();
@@ -107,6 +102,22 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
             if (IndexJudge(PhotonNetwork.LocalPlayer.ActorNumber - 1))
             {
                 GraveRobbing();
+
+                SkillButtonDestroy();
+
+                indexMatch = true;
+            }
+            else
+            {
+                CannotInfo();
+            }
+        }
+
+        if (sCardNo == 2)
+        {
+            if (IndexJudge(PhotonNetwork.LocalPlayer.ActorNumber - 1))
+            {
+                Siirecus();
 
                 SkillButtonDestroy();
 
@@ -147,27 +158,42 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
     public void CardOderOwnHand(PlayerHand hand)
     {
-        hand.allCards.OrderBy(x => x.model.Strenge).ThenBy(x => x.model.Suit);
+        var miniList = hand.allCards.Where(x => x.model.Joker == true).ToList();
+        foreach (var joker in miniList)
+        {
+            joker.model.Strenge = 14;
+        }
+        miniList = null;
+
+        hand.allCards = hand.allCards.OrderBy(x => x.model.Suit).OrderBy(x => x.model.Strenge).ToList();
 
         for (int i = 0; i < hand.allCards.Count; i++)
         {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}playerHand Strange {hand.allCards[i].model.Strenge} Suit {hand.allCards[i].model.Suit}");
             int posX = i * 60;
             int posXToCenter = hand.allCards.Count * 28;
             hand.allCards[i].transform.localPosition = new Vector3(posX - posXToCenter, 0);
             hand.allCards[i].transform.SetSiblingIndex(i);
+            hand.allCards[i].GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
     }
 
     public void CardOrderOtherHand(PlayerHand hand)
     {
-        hand.allCards.OrderBy(x => x.model.Suit).OrderBy(x => x.model.Strenge);
+        var miniList = hand.allCards.Where(x => x.model.Joker == true).ToList();
+        foreach (var joker in miniList)
+        {
+            joker.model.Strenge = 14;
+        }
+        miniList = null;
+
+        hand.allCards = hand.allCards.OrderBy(x => x.model.Suit).OrderBy(x => x.model.Strenge).ToList();
 
         for (int i = 0; i < hand.allCards.Count; i++)
         {
             int posX = i * 20;
             int posXToCenter = hand.allCards.Count * 9;
             hand.allCards[i].transform.localPosition = new Vector3(posX - posXToCenter, 0);
+            hand.allCards[i].transform.localPosition = new Vector3(1f, 1f, 1f);
             hand.allCards[i].transform.localScale = Vector3.one / 3;
             hand.allCards[i].transform.SetSiblingIndex(i);
         }
@@ -219,7 +245,8 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         for (int i = 0; i < field.cards.Count; i++)
         {
             field.cards[i].transform.SetParent(ownHand.transform, false);
-            //field.cards[i].transform.localScale = Vector3.one / 1.6f;
+            field.cards[i].transform.localScale = new Vector3(1f, 1f, 1f);
+            field.cards[i].hand = ownHand;
         }
         field.cards.Clear();
         CardOderOwnHand(ownHand);
@@ -251,8 +278,6 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     [PunRPC]
     public void WeitingCardsBack()
     {
-        field.cards.AddRange(field.waitingCards);
-        field.waitingCards.Clear();
         foreach (var card in field.waitingCards)
         {
             CardController body = Instantiate(Resources.Load("Prefab/Card")).GetComponent<CardController>();
@@ -260,8 +285,49 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
             body.transform.SetParent(field.transform, false);
             body.Init(card.model.ID);
 
-            
+            field.cards.Remove(card);
+            field.cards.Add(body);
         }
+        field.waitingCards.Clear();
+
         CardOrderField(field);
+    }
+
+    public void Siirecus()
+    {
+        GetOwnHand();
+
+        for (int i = 0; i < 2; i++)
+        {
+            CardController card = Instantiate(Resources.Load("Prefab/Card")).GetComponent<CardController>();
+
+            card.transform.SetParent(ownHand.transform);
+            card.Init(53);
+
+            ownHand.allCards.Add(card);
+        }
+        CardOderOwnHand(ownHand);
+
+        photonView.RPC("SiirecusForOther", RpcTarget.Others, PhotonNetwork.LocalPlayer.ActorNumber);
+    }
+
+    [PunRPC]
+    public void SiirecusForOther(int player)
+    {
+        int index = GameManager.instance.otherActors.IndexOf(player);
+
+        PlayerHand crrentPlayer = GameManager.instance.otherHnands[index].GetComponent<PlayerHand>();
+
+        for (int i = 0; i < 2; i++)
+        {
+            CardController card = Instantiate(Resources.Load("Prefab/Card")).GetComponent<CardController>();
+
+            card.transform.SetParent(ownHand.transform);
+            card.Init(53);
+
+            crrentPlayer.allCards.Add(card);
+        }
+
+        CardOrderOtherHand(crrentPlayer);
     }
 }
