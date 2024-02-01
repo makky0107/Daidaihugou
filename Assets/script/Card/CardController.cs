@@ -44,7 +44,10 @@ public class CardController : MonoBehaviourPunCallbacks
         model = new CardModel(cardID);
         view.Show(model);
         hand = GetComponentInParent<PlayerHand>();
-        hand.allCards.Add(this);
+        if (hand != null)
+        {
+            hand.allCards.Add(this);
+        }
         TheBackSide();
     }
 

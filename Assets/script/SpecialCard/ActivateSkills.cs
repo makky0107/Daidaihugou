@@ -147,7 +147,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
     public void CardOderOwnHand(PlayerHand hand)
     {
-        hand.allCards.OrderBy(x => x.model.Suit).OrderBy(x => x.model.Strenge);
+        hand.allCards.OrderBy(x => x.model.Strenge).ThenBy(x => x.model.Suit);
 
         for (int i = 0; i < hand.allCards.Count; i++)
         {
@@ -219,7 +219,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         for (int i = 0; i < field.cards.Count; i++)
         {
             field.cards[i].transform.SetParent(ownHand.transform, false);
-            field.cards[i].transform.localScale = Vector3.one / 1.6f;
+            //field.cards[i].transform.localScale = Vector3.one / 1.6f;
         }
         field.cards.Clear();
         CardOderOwnHand(ownHand);
@@ -252,12 +252,15 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     public void WeitingCardsBack()
     {
         field.cards.AddRange(field.waitingCards);
+        field.waitingCards.Clear();
         foreach (var card in field.waitingCards)
         {
             CardController body = Instantiate(Resources.Load("Prefab/Card")).GetComponent<CardController>();
 
             body.transform.SetParent(field.transform, false);
             body.Init(card.model.ID);
+
+            
         }
         CardOrderField(field);
     }
