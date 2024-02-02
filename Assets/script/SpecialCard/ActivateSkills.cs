@@ -322,7 +322,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         {
             CardController card = Instantiate(Resources.Load("Prefab/Card")).GetComponent<CardController>();
 
-            card.transform.SetParent(ownHand.transform);
+            card.transform.SetParent(crrentPlayer.transform, false);
             card.Init(53);
 
             crrentPlayer.allCards.Add(card);

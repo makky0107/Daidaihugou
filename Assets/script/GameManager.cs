@@ -695,7 +695,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Debug.Log($"<size=24><color=red>currentPlayerIndex {currentPlayerIndex}</color></size>");
 
-        int ActorNumber = playerOrder.Find(x => x == currentPlayerIndex + 1);
+        //int ActorNumber = playerOrder.Find(x => x == currentPlayerIndex + 1);
 
         if (playerOrder.Any(x => x == currentPlayerIndex + 1))
         {
