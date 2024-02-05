@@ -304,7 +304,6 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
             card.transform.SetParent(ownHand.transform);
             card.Init(53);
 
-            /*
             float workW = (float)Screen.width / 1170f;
             float workH = (float)Screen.height / 2540f;
 
@@ -317,8 +316,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
             {
                 _adj = workH;
             }
-            card.transform.localScale /= _adj;
-            */
+            card.transform.localScale *= _adj;
 
             ownHand.allCards.Add(card);
         }

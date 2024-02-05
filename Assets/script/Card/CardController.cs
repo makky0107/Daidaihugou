@@ -97,22 +97,6 @@ public class CardController : MonoBehaviourPunCallbacks
     {
         Debug.Log("<color=yellow><size=18>Click model.Number</size></color>" + model.Number);
 
-        RectTransform rectTransform = GetComponent<RectTransform>();
-        float width = rectTransform.rect.width;
-        float height = rectTransform.rect.height;
-
-        BoxCollider2D boxCollider2D = GetComponent<BoxCollider2D>();
-        Vector2 size = boxCollider2D.size;
-        Vector3 scale = transform.localScale;
-
-        float colliderWidth = size.x * scale.x;
-        float colliderHeight = size.y * scale.y;
-
-        if (lS != null)
-        {
-            lS.photonView.RPC("AddLog", RpcTarget.All, $"Transform Width:{width}, Height:{height} boxCollider2D Width:{colliderWidth}, Height:{colliderHeight}");
-        }
-
         if (canSelect && hand.isTurn)
         {
             if (model.Joker)

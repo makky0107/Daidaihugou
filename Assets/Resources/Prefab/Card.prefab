@@ -499,6 +499,7 @@ MonoBehaviour:
   sameCard: 0
   myHand: OwnHand
   myField: OwnField
+  lS: {fileID: 0}
 --- !u!225 &3806242610190480413
 CanvasGroup:
   m_ObjectHideFlags: 0
