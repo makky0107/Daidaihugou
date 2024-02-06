@@ -835,11 +835,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void MyTurn()
     {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=gray>MyTurn {PhotonNetwork.LocalPlayer.ActorNumber}Player</color>");
+
         Debug.Log($"<size=24><color=green>MyTurn {PhotonNetwork.LocalPlayer.ActorNumber}Player</color></size>");
 
         int index = (int)PhotonNetwork.PlayerList[0].CustomProperties["currentPlayerIndex"];
 
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"PlayerList[{PhotonNetwork.LocalPlayer.ActorNumber - 1}] curremtPlayerIndex {currentPlayerIndex} index {index}");
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"PlayerList[{PhotonNetwork.LocalPlayer.ActorNumber - 1}] index {index}");
 
         if (index != PhotonNetwork.LocalPlayer.ActorNumber - 1)
         {
