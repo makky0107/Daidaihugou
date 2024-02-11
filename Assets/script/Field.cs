@@ -46,6 +46,8 @@ public class Field : MonoBehaviourPunCallbacks
 
     public int rank = 0;
 
+    [SerializeField] LoggerScroll lS;
+
     private void Awake()
     {
         shadow.SetActive(false);
@@ -59,12 +61,16 @@ public class Field : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Judge(int index)
     {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"juge index {index}");
+
         Debug.Log($"<color=black><size=20>Judge {PhotonNetwork.LocalPlayer.ActorNumber} Player </size></color>");
 
         if (upsideDown)
         {
             Debug.Log("<color=red>upsideDown</color>");
         }
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 1");
 
         common = true;
 
@@ -77,6 +83,8 @@ public class Field : MonoBehaviourPunCallbacks
             currentHand = hands[gameManager.currentPlayerIndex];
         }
 
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 2");
+
         if (cards.Any())
         {
             foreach (var card in cards)
@@ -84,6 +92,8 @@ public class Field : MonoBehaviourPunCallbacks
                 card.shadow.SetActive(false);
             }
         }
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 3");
 
         if (cards.Count == 2)
         {
@@ -93,6 +103,9 @@ public class Field : MonoBehaviourPunCallbacks
         {
             JokerSetNumberThree();
         }
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 4");
+
 
         foreach (var card in cards)
         {
@@ -109,21 +122,46 @@ public class Field : MonoBehaviourPunCallbacks
 
         currentHand.fieldCount = cards.Count;
 
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 5");
+
+        int count = 0;
+
+        currentHand.allCards.RemoveAll(card => card.gameObject == null);
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"cardsCount{currentHand.allCards.Count}");
+
         foreach (var card in currentHand.allCards)
         {
+            count++;
+
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=orange>card {count} No{card.model.Number}</color>");
+
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 6");
+
             card.canSelect = false;
+
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 7");
+
             card.ShadowUpdate();
 
             card.GetComponent<CardMovement>().isDrag = false;
 
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 8");
+
             if (card.model.Joker)
             {
+                lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 9");
+
                 card.model.Strenge = card.model.UpsideDown = 14;
             }
         }
 
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 10");
+
         currentHand.stairsList.Clear();
         currentHand.canSelectCards.Clear();
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 11");
 
         if (cards.Any())
         {
@@ -193,10 +231,14 @@ public class Field : MonoBehaviourPunCallbacks
             }
         }
 
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 12");
+
         if (common)
         {
             SetCard();
         }
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"juge 13");
 
         if (currentHand.restriction)
         {

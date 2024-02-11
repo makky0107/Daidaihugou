@@ -814,6 +814,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void StartCountdown()
     {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"StartCountdown Player[{PhotonNetwork.LocalPlayer.ActorNumber - 1}]");
         StartCoroutine(CountDown());
     }
 
@@ -845,20 +846,27 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (index != PhotonNetwork.LocalPlayer.ActorNumber - 1)
         {
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=black>MyTurn 1</color>");
+
             photonView.RPC("MyTurn", PhotonNetwork.PlayerList[index]);
         }
         else
         {
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=black>MyTurn 2</color>");
+
             ownHand.isTurn = true;
 
-            field.photonView.RPC("Judge", PhotonNetwork.LocalPlayer, PhotonNetwork.LocalPlayer.ActorNumber - 1);
+            field.Judge(PhotonNetwork.LocalPlayer.ActorNumber - 1);
 
             Debug.Log($"<size=24><color=red>ownHand.isTurn {ownHand.isTurn}</color></size>");
+            //lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=black>MyTurn 3</color>");
 
             actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
 
             otherActors = new List<int>(playerOrder);
             otherActors.Remove(actorNumber);
+
+            //lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=black>MyTurn 4</color>");
 
             foreach (var other in otherActors)
             {
@@ -871,28 +879,40 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
             }
 
+            //lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=black>MyTurn 5</color>");
+
             foreach (var hand in otherHnands)
             {
                 hand.GetComponent<PlayerHand>().isTurn = false;
             }
 
+            //lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=black>MyTurn 6</color>");
+
             photonView.RPC("NotMyTurn", RpcTarget.Others);
+
+            //lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=black>MyTurn 7</color>");
 
             if (ownHand.restriction == true)
             {
+                //lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=black>MyTurn 8</color>");
+
                 ownHand.photonView.RPC("Restriction", PhotonNetwork.PlayerList[currentPlayerIndex]);
             }
             if (ownHand.allCards.Count == 0)
             {
+                //lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=black>MyTurn 9</color>");
+
                 photonView.RPC("OnPass", PhotonNetwork.PlayerList[0]);
             }
             else
             {
+                //lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=black>MyTurn 10</color>");
+
                 Debug.Log("ownHand.isTurn" + ownHand.isTurn);
 
                 photonView.RPC("StopAllCoroutinesOnNetwork", RpcTarget.All);
 
-                photonView.RPC("StartCountdown", PhotonNetwork.LocalPlayer);
+                StartCountdown();
             }
         }  
     }

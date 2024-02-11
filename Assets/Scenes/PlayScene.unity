@@ -4611,6 +4611,7 @@ MonoBehaviour:
   bindText: {fileID: 2116907723}
   gameManager: {fileID: 1862494384}
   rank: 0
+  lS: {fileID: 1191981398}
 --- !u!114 &1840820657
 MonoBehaviour:
   m_ObjectHideFlags: 0

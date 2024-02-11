@@ -322,6 +322,8 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         }
         CardOderOwnHand(ownHand);
 
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=red>ownHand.allCards {ownHand.allCards.Count}");
+
         photonView.RPC("SiirecusForOther", RpcTarget.Others, PhotonNetwork.LocalPlayer.ActorNumber);
     }
 
