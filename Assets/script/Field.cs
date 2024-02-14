@@ -581,7 +581,10 @@ public class Field : MonoBehaviourPunCallbacks
                     if (own)
                     {
                         own.pass.SetActive(false);
-                        own.skill.SetActive(false);
+                        if (own.skill != null)
+                        {
+                            own.skill.SetActive(false);
+                        }
                         own.rank[hand.rank].SetActive(true);
 
                         Destroy(GameManager.instance.countText);
@@ -625,7 +628,10 @@ public class Field : MonoBehaviourPunCallbacks
                     if (own)
                     {
                         own.pass.SetActive(false);
-                        own.skill.SetActive(false);
+                        if (own.skill != null)
+                        {
+                            own.skill.SetActive(false);
+                        }
                         own.rank[hand.rank].SetActive(true);
                         Destroy(GameManager.instance.countText);
                     }
@@ -645,7 +651,10 @@ public class Field : MonoBehaviourPunCallbacks
                     if (own)
                     {
                         own.pass.SetActive(false);
-                        own.skill.SetActive(false);
+                        if (own.skill != null)
+                        {
+                            own.skill.SetActive(false);
+                        }
                         own.rank[hand.rank].SetActive(true);
                         Destroy(GameManager.instance.countText);
                     }

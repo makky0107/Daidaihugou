@@ -843,57 +843,52 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         int index = (int)PhotonNetwork.PlayerList[0].CustomProperties["currentPlayerIndex"];
 
-        if (index != PhotonNetwork.LocalPlayer.ActorNumber - 1)
+        Debug.Log($"<size=24><color=green>MyTurn index{index}</color></size>");
+
+        ownHand.isTurn = true;
+
+        field.Judge(PhotonNetwork.LocalPlayer.ActorNumber - 1);
+
+        Debug.Log($"<size=24><color=red>ownHand.isTurn {ownHand.isTurn}</color></size>");
+        actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+
+        otherActors = new List<int>(playerOrder);
+        otherActors.Remove(actorNumber);
+
+        foreach (var other in otherActors)
         {
-            photonView.RPC("MyTurn", PhotonNetwork.PlayerList[index]);
+            foreach (var player in PhotonNetwork.PlayerList.ToList())
+            {
+                if (player.ActorNumber == other)
+                {
+                    photonView.RPC("PlayerUnableAct", player);
+                }
+            }
+        }
+
+        foreach (var hand in otherHnands)
+        {
+            hand.GetComponent<PlayerHand>().isTurn = false;
+        }
+
+        photonView.RPC("NotMyTurn", RpcTarget.Others);
+
+        if (ownHand.restriction == true)
+        {
+            ownHand.photonView.RPC("Restriction", PhotonNetwork.PlayerList[currentPlayerIndex]);
+        }
+        if (ownHand.allCards.Count == 0)
+        {
+            photonView.RPC("OnPass", PhotonNetwork.PlayerList[0]);
         }
         else
         {
-            ownHand.isTurn = true;
+            Debug.Log("ownHand.isTurn" + ownHand.isTurn);
 
-            field.Judge(PhotonNetwork.LocalPlayer.ActorNumber - 1);
+            photonView.RPC("StopAllCoroutinesOnNetwork", RpcTarget.All);
 
-            Debug.Log($"<size=24><color=red>ownHand.isTurn {ownHand.isTurn}</color></size>");
-            actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
-
-            otherActors = new List<int>(playerOrder);
-            otherActors.Remove(actorNumber);
-
-            foreach (var other in otherActors)
-            {
-                foreach (var player in PhotonNetwork.PlayerList.ToList())
-                {
-                    if (player.ActorNumber == other)
-                    {
-                        photonView.RPC("PlayerUnableAct", player);
-                    }
-                }
-            }
-
-            foreach (var hand in otherHnands)
-            {
-                hand.GetComponent<PlayerHand>().isTurn = false;
-            }
-
-            photonView.RPC("NotMyTurn", RpcTarget.Others);
-
-            if (ownHand.restriction == true)
-            {
-                ownHand.photonView.RPC("Restriction", PhotonNetwork.PlayerList[currentPlayerIndex]);
-            }
-            if (ownHand.allCards.Count == 0)
-            {
-                photonView.RPC("OnPass", PhotonNetwork.PlayerList[0]);
-            }
-            else
-            {
-                Debug.Log("ownHand.isTurn" + ownHand.isTurn);
-
-                photonView.RPC("StopAllCoroutinesOnNetwork", RpcTarget.All);
-
-                StartCountdown();
-            }
-        }  
+            StartCountdown();
+        }
     }
 
     [PunRPC]
