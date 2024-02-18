@@ -879,7 +879,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         if (ownHand.allCards.Count == 0)
         {
-            photonView.RPC("OnPass", PhotonNetwork.PlayerList[0]);
+            OnPass();
         }
         else
         {
