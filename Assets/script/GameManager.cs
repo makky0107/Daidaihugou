@@ -12,6 +12,8 @@ using Unity.VisualScripting;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -501,79 +503,93 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void ResetField()
     {
-        photonView.RPC("CheckMyTurn", RpcTarget.All);
-
-        if (PhotonNetwork.PlayerList.ToList().Count < 2)
+        int finishedCount = FindObjectsOfType<PlayerHand>().ToList().Count(x => x.allCards.Count == 0);
+        if (finishedCount > 3)
         {
-            if (twoPHand.restriction)
-            {
-                twoPHand.isTurn = false;
-            }
-            else
-            {
-                twoPHand.isTurn = true;
-            }
+            photonView.RPC("ToGameOver", RpcTarget.All);
         }
-        if (PhotonNetwork.PlayerList.ToList().Count < 3)
+        else
         {
-            if (threePHand.restriction)
+            photonView.RPC("CheckMyTurn", RpcTarget.All);
+
+            if (PhotonNetwork.PlayerList.ToList().Count < 2)
             {
-                threePHand.isTurn = false;
+                if (twoPHand.restriction)
+                {
+                    twoPHand.isTurn = false;
+                }
+                else
+                {
+                    twoPHand.isTurn = true;
+                }
             }
-            else
+            if (PhotonNetwork.PlayerList.ToList().Count < 3)
             {
-                threePHand.isTurn = true;
+                if (threePHand.restriction)
+                {
+                    threePHand.isTurn = false;
+                }
+                else
+                {
+                    threePHand.isTurn = true;
+                }
             }
-        }
-        if (PhotonNetwork.PlayerList.ToList().Count < 4)
-        {
-            if (fourPHand.restriction)
+            if (PhotonNetwork.PlayerList.ToList().Count < 4)
             {
-                fourPHand.isTurn = false;
+                if (fourPHand.restriction)
+                {
+                    fourPHand.isTurn = false;
+                }
+                else
+                {
+                    fourPHand.isTurn = true;
+                }
             }
-            else
+
+            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
-                fourPHand.isTurn = true;
+                field.photonView.RPC("ResetField", PhotonNetwork.PlayerList[i]);
+
+                photonView.RPC("FieldArrange", PhotonNetwork.PlayerList[i]);
+
+                photonView.RPC("RestrictionCheck", PhotonNetwork.PlayerList[i]);
             }
-        }
 
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            field.photonView.RPC("ResetField", PhotonNetwork.PlayerList[i]);
-
-            photonView.RPC("FieldArrange", PhotonNetwork.PlayerList[i]);
-
-            photonView.RPC("RestrictionCheck", PhotonNetwork.PlayerList[i]);
-        }
-
-        foreach (var hand in hands)
-        {
-            if (!hand.restriction && hand.gameObject.name != "OwnHand" && hand.index != 4)
+            foreach (var hand in hands)
             {
-                Debug.LogWarning($"<size=24><color=AFDFE4>!hand.restriction name {hand} index {hand.index}</color></size>");
+                if (!hand.restriction && hand.gameObject.name != "OwnHand" && hand.index != 4)
+                {
+                    Debug.LogWarning($"<size=24><color=AFDFE4>!hand.restriction name {hand} index {hand.index}</color></size>");
 
-                currentPlayerIndex = hand.index;
-                break;
+                    currentPlayerIndex = hand.index;
+                    break;
+                }
             }
-        }
 
-        StartCoroutine(SuccessionCarwl(0.1f));
+            StartCoroutine(SuccessionCarwl(0.1f));
 
-        foreach (var hand in hands)
-        {
-            if (hand.gameObject.name != "OwnHand")
+            foreach (var hand in hands)
             {
-                hand.restriction = false;
+                if (hand.gameObject.name != "OwnHand")
+                {
+                    hand.restriction = false;
+                }
             }
-        }
 
-        photonView.RPC("OwnHandRestrictionReset", RpcTarget.All);
+            photonView.RPC("OwnHandRestrictionReset", RpcTarget.All);
 
-        deactiveCount = 0;
+            deactiveCount = 0;
 
-        Debug.LogWarning($"<size=24><color=blue>ResetField currentPlayerIndex {currentPlayerIndex}</color></size>");
+            Debug.LogWarning($"<size=24><color=blue>ResetField currentPlayerIndex {currentPlayerIndex}</color></size>");
 
-        photonView.RPC("StartTurnControl", PhotonNetwork.PlayerList[0]);
+            photonView.RPC("StartTurnControl", PhotonNetwork.PlayerList[0]);
+        }   
+    }
+
+    [PunRPC]
+    public void ToGameOver()
+    {
+        SceneManager.LoadScene("GameOver");
     }
 
     [PunRPC]
