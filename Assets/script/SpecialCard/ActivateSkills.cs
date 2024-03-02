@@ -49,7 +49,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     {
         text = Instantiate(Resources.Load("Prefab/InfoText")).GetComponent<Text>();
 
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}player text {text.gameObject.name}");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.ActorNumber - 1}player text {text.gameObject.name}");
 
         text.transform.SetParent(GameObject.Find("Canvas").transform, false);
         text.transform.localPosition = Vector3.zero;
@@ -322,7 +322,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         }
         CardOderOwnHand(ownHand);
 
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=red>ownHand.allCards {ownHand.allCards.Count}");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"<color=red>ownHand.allCards {ownHand.allCards.Count}");
 
         photonView.RPC("SiirecusForOther", RpcTarget.Others, PhotonNetwork.LocalPlayer.ActorNumber);
     }

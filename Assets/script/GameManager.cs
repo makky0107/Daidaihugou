@@ -833,7 +833,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void StartCountdown()
     {
-        lS.photonView.RPC("AddLog", RpcTarget.All, $"StartCountdown Player[{PhotonNetwork.LocalPlayer.ActorNumber - 1}]");
+        //lS.photonView.RPC("AddLog", RpcTarget.All, $"StartCountdown Player[{PhotonNetwork.LocalPlayer.ActorNumber - 1}]");
         StartCoroutine(CountDown());
     }
 
