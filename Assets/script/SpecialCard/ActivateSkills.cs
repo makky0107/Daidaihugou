@@ -12,17 +12,24 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     public Field field;
 
     public PlayerHand ownHand;
-
+    public PlayerHand twoPHand;
+    public PlayerHand threePHand;
+    public PlayerHand fourPHand;
+    List<PlayerHand> others;
 
     public CallSkill call;
 
     public bool indexMatch;
 
     public int index;
+    public int searchCount;
 
     public Text text;
 
     public LoggerScroll lS;
+
+    List<CardController> cards;
+    List<CardController> distCards;
 
     private void Start()
     {
@@ -129,6 +136,24 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
             }
         }
 
+        if (sCardNo == 3)
+        {
+            BadEnd();
+
+            SkillButtonDestroy();
+
+            indexMatch = true;
+        }
+
+        if (sCardNo == 4)
+        {
+
+
+            SkillButtonDestroy();
+
+            indexMatch = true;
+        }
+
         if (indexMatch)
         {
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -149,6 +174,21 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     public void GetOwnHand()
     {
         ownHand = GameObject.Find("OwnHand").GetComponent<PlayerHand>();
+    }
+
+    public void GetTwoPHand()
+    {
+        twoPHand = GameObject.Find("TwoPHand").GetComponent<PlayerHand>();
+    }
+
+    public void GetThreePHand()
+    {
+        threePHand = GameObject.Find("ThreePHand").GetComponent<PlayerHand>();
+    }
+
+    public void GetForPHand()
+    {
+        fourPHand = GameObject.Find("FourPHand").GetComponent<PlayerHand>();
     }
 
     public void SkillButtonDestroy()
@@ -345,5 +385,105 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         }
 
         CardOrderOtherHand(crrentPlayer);
+    }
+
+    public void BadEnd()
+    {
+        photonView.RPC("TurnChengeMine", PhotonNetwork.PlayerList[0], PhotonNetwork.LocalPlayer.ActorNumber - 1);
+    }
+
+    [PunRPC]
+    public void TurnChengeMine(int index)
+    {
+        GameManager.instance.currentPlayerIndex = index;
+
+        GameManager.instance.StartTurnControl();
+    }
+
+    public void Sincerity()
+    {
+        GetOwnHand();
+        GetTwoPHand();
+        GetThreePHand();
+        GetForPHand();
+
+        GameObject.Find("SelectOne").SetActive(true);
+        GameObject.Find("SelectTwo").SetActive(true);
+        GameObject.Find("SelectThree").SetActive(true);
+
+        others = new List<PlayerHand>() { twoPHand, threePHand, fourPHand };
+
+        searchCount = 0;
+
+        ApexStrengeSearch(ownHand);
+    }
+
+    public void ApexStrengeSearch(PlayerHand hand)
+    {
+        if (searchCount >= 3 && hand.allCards.Count > 1)
+        {
+            CardController maxCard = hand.allCards.Find(x => x.model.Strenge == hand.allCards.Max(x => x.model.Strenge));
+            photonView.RPC("CardPulass", RpcTarget.All, maxCard.model.ID);
+            hand.allCards.Remove(maxCard);
+
+            searchCount++;
+
+            ApexStrengeSearch(hand);
+        }
+        
+    }
+
+    [PunRPC]
+    public void CardPulass(int no)
+    {
+        CardController card = Instantiate(Resources.Load("Prefab/Card")).GetComponent<CardController>();
+
+        card.Init(no);
+
+        float workW = (float)Screen.width / 1170f;
+        float workH = (float)Screen.height / 2540f;
+
+        float _adj = 0;
+        if (workW < workH)
+        {
+            _adj = workW;
+        }
+        else
+        {
+            _adj = workH;
+        }
+        card.transform.localScale *= _adj;
+
+        distCards.Add(card);
+    }
+
+    [PunRPC]
+    public void SincerityDistribute(int hand)
+    {
+        others[hand].allCards.AddRange(cards);
+    }
+
+    [PunRPC]
+    public void SincerityDistributeForOther(int ownerHand, int distHand)
+    {
+        int ownIndex = GameManager.instance.otherActors.IndexOf(ownerHand);
+        PlayerHand crrentPlayer = GameManager.instance.otherHnands[ownIndex].GetComponent<PlayerHand>();
+
+        for (int i = 0; i < distCards.Count; i++)
+        {
+            crrentPlayer.allCards.Remove(crrentPlayer.allCards.Find(x => x.model.ID == distCards[i].model.ID));
+        }
+
+        if (distHand == PhotonNetwork.LocalPlayer.ActorNumber - 1)
+        {
+            GetOwnHand();
+            ownHand.allCards.AddRange(distCards);
+        }
+        else
+        {
+            int index = GameManager.instance.otherActors.IndexOf(distHand);
+            PlayerHand distributePlayer = GameManager.instance.otherHnands[index].GetComponent<PlayerHand>();
+            distributePlayer.allCards.AddRange(distCards); 
+        }
     }
 }
