@@ -9,9 +9,28 @@ public class SelectPlayer : MonoBehaviourPunCallbacks
     [SerializeField] int player;
     ActivateSkills activate;
 
+    PlayerHand twoPHand;
+    PlayerHand threePHand;
+    PlayerHand fourPHand;
+
     private void Awake()
     {
         this.gameObject.SetActive(false);
+    }
+
+    public void GetTwoPHand()
+    {
+        twoPHand = GameObject.Find("TwoPHand").GetComponent<PlayerHand>();
+    }
+
+    public void GetThreePHand()
+    {
+        threePHand = GameObject.Find("ThreePHand").GetComponent<PlayerHand>();
+    }
+
+    public void GetForPHand()
+    {
+        fourPHand = GameObject.Find("FourPHand").GetComponent<PlayerHand>();
     }
 
     public void PlsyerSelect()
@@ -19,11 +38,15 @@ public class SelectPlayer : MonoBehaviourPunCallbacks
         activate = GameObject.Find("Empty(Clone)").GetComponent<ActivateSkills>();
         activate.SincerityDistribute(player);
 
-        activate.photonView.RPC("SincerityDistributePreparation", PhotonNetwork.LocalPlayer, player);
+        activate.photonView.RPC("SincerityDistributePreparation", RpcTarget.Others, player);
 
-        GameObject.Find("TwoPhand").GetComponentInChildren<SelectPlayer>().gameObject.SetActive(false);
-        GameObject.Find("ThreePhand").GetComponentInChildren<SelectPlayer>().gameObject.SetActive(false);
-        GameObject.Find("FourPhand").GetComponentInChildren<SelectPlayer>().gameObject.SetActive(false);
+        GetTwoPHand();
+        GetThreePHand();
+        GetForPHand();
+
+        twoPHand.transform.Find("SelectOne").gameObject.SetActive(false);
+        threePHand.transform.Find("SelectTwo").gameObject.SetActive(false);
+        fourPHand.transform.Find("SelectThree").gameObject.SetActive(false);
     }
     
     public void JudgePlayer(int player)
