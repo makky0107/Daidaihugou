@@ -15,7 +15,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     public PlayerHand twoPHand;
     public PlayerHand threePHand;
     public PlayerHand fourPHand;
-    List<PlayerHand> others;
+    List<PlayerHand> others = new List<PlayerHand>();
 
     public CallSkill call;
 
@@ -28,8 +28,8 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
     public LoggerScroll lS;
 
-    List<CardController> cards;
-    List<CardController> distCards;
+    List<CardController> cards = new List<CardController>();
+    List<CardController> distCards = new List<CardController>();
 
     private void Start()
     {
@@ -147,11 +147,18 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
         if (sCardNo == 4)
         {
+            if (IndexJudge(PhotonNetwork.LocalPlayer.ActorNumber - 1))
+            {
+                Sincerity();
 
+                SkillButtonDestroy();
 
-            SkillButtonDestroy();
-
-            indexMatch = true;
+                indexMatch = true;
+            }
+            else
+            {
+                CannotInfo();
+            }
         }
 
         if (indexMatch)
@@ -407,9 +414,11 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         GetThreePHand();
         GetForPHand();
 
-        GameObject.Find("SelectOne").SetActive(true);
-        GameObject.Find("SelectTwo").SetActive(true);
-        GameObject.Find("SelectThree").SetActive(true);
+        twoPHand.transform.Find("SelectOne").gameObject.SetActive(true);
+        threePHand.transform.Find("SelectTwo").gameObject.SetActive(true);
+        fourPHand.transform.Find("SelectThree").gameObject.SetActive(true);
+
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"Sincerity Start");
 
         others = new List<PlayerHand>() { twoPHand, threePHand, fourPHand };
 
@@ -420,6 +429,8 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
     public void ApexStrengeSearch(PlayerHand hand)
     {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"ApexStrengeSearch");
+
         if (searchCount >= 3 && hand.allCards.Count > 1)
         {
             CardController maxCard = hand.allCards.Find(x => x.model.Strenge == hand.allCards.Max(x => x.model.Strenge));
@@ -436,6 +447,8 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     [PunRPC]
     public void CardPulass(int no)
     {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"CardPulass");
+
         CardController card = Instantiate(Resources.Load("Prefab/Card")).GetComponent<CardController>();
 
         card.Init(no);
@@ -460,12 +473,28 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SincerityDistribute(int hand)
     {
-        others[hand].allCards.AddRange(cards);
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"SincerityDistribute");
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"hand {hand}");
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"others[hand] {others[hand]}");
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"allCards.Count {others[hand].allCards.Count}");
+
+        others[hand].allCards.AddRange(distCards);
+
+        for (int i = 0; i < distCards.Count; i++)
+        {
+            distCards[i].transform.SetParent(others[hand].transform);
+        }
+
+        CardOrderOtherHand(others[hand]);
+
+        CardOderOwnHand(ownHand);
     }
 
     [PunRPC]
-    public void SincerityDistributeForOther(int ownerHand, int distHand)
+    public void SincerityDistributePreparation(int ownerHand)
     {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"SincerityDistributePreparation");
+
         int ownIndex = GameManager.instance.otherActors.IndexOf(ownerHand);
         PlayerHand crrentPlayer = GameManager.instance.otherHnands[ownIndex].GetComponent<PlayerHand>();
 
@@ -473,17 +502,40 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
         {
             crrentPlayer.allCards.Remove(crrentPlayer.allCards.Find(x => x.model.ID == distCards[i].model.ID));
         }
+    }
 
-        if (distHand == PhotonNetwork.LocalPlayer.ActorNumber - 1)
+    [PunRPC]
+    public void SincerityDistributeForYou()
+    {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"SincerityDistributeForYou");
+
+        GetOwnHand();
+        ownHand.allCards.AddRange(distCards);
+
+        for (int i = 0; i < distCards.Count; i++)
         {
-            GetOwnHand();
-            ownHand.allCards.AddRange(distCards);
+            distCards[i].transform.SetParent(ownHand.transform);
         }
-        else
+
+        CardOderOwnHand(ownHand);
+
+        photonView.RPC("SincerityDistributeForOther", RpcTarget.Others, PhotonNetwork.LocalPlayer.ActorNumber - 1);
+    }
+
+    [PunRPC]
+    public void SincerityDistributeForOther(int distHand)
+    {
+        lS.photonView.RPC("AddLog", RpcTarget.All, $"SincerityDistributeForOther");
+
+        int index = GameManager.instance.otherActors.IndexOf(distHand);
+        PlayerHand distributePlayer = GameManager.instance.otherHnands[index].GetComponent<PlayerHand>();
+        distributePlayer.allCards.AddRange(distCards);
+
+        for (int i = 0; i < distCards.Count; i++)
         {
-            int index = GameManager.instance.otherActors.IndexOf(distHand);
-            PlayerHand distributePlayer = GameManager.instance.otherHnands[index].GetComponent<PlayerHand>();
-            distributePlayer.allCards.AddRange(distCards); 
+            distCards[i].transform.SetParent(distributePlayer.transform);
         }
+
+        CardOrderOtherHand(distributePlayer);
     }
 }

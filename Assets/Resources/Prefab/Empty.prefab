@@ -69,8 +69,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   field: {fileID: 0}
   ownHand: {fileID: 0}
+  twoPHand: {fileID: 0}
+  threePHand: {fileID: 0}
+  fourPHand: {fileID: 0}
   call: {fileID: 0}
   indexMatch: 0
   index: 0
+  searchCount: 0
   text: {fileID: 0}
   lS: {fileID: 0}

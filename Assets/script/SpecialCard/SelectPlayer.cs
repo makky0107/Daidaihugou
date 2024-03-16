@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class SelectPlayer : MonoBehaviour
+public class SelectPlayer : MonoBehaviourPunCallbacks
 {
     [SerializeField] int player;
+    ActivateSkills activate;
 
     private void Awake()
     {
@@ -13,14 +16,32 @@ public class SelectPlayer : MonoBehaviour
 
     public void PlsyerSelect()
     {
-        ActivateSkills activate = GameObject.Find("empty").GetComponent<ActivateSkills>();
+        activate = GameObject.Find("Empty(Clone)").GetComponent<ActivateSkills>();
         activate.SincerityDistribute(player);
 
-        activate.photonView.RPC("SincerityDistributeForOther", Photon.Pun.PhotonNetwork.LocalPlayer, player);
+        activate.photonView.RPC("SincerityDistributePreparation", PhotonNetwork.LocalPlayer, player);
 
-        GameObject.Find("SelectOne").SetActive(true);
-        GameObject.Find("SelectTwo").SetActive(true);
-        GameObject.Find("SelectThree").SetActive(true);
+        GameObject.Find("TwoPhand").GetComponentInChildren<SelectPlayer>().gameObject.SetActive(false);
+        GameObject.Find("ThreePhand").GetComponentInChildren<SelectPlayer>().gameObject.SetActive(false);
+        GameObject.Find("FourPhand").GetComponentInChildren<SelectPlayer>().gameObject.SetActive(false);
     }
     
+    public void JudgePlayer(int player)
+    {
+        if (PhotonNetwork.PlayerList[player] != null)
+        {
+            if (PhotonNetwork.PlayerList[player].ActorNumber != PhotonNetwork.LocalPlayer.ActorNumber)
+            {
+                activate.photonView.RPC("SincerityDistributeForYou", PhotonNetwork.PlayerList[player]);
+            }
+            else
+            {
+                JudgePlayer(player + 1);
+            }
+        }
+        else
+        {
+            activate.photonView.RPC("SincerityDistributeForOther", RpcTarget.Others, player);
+        }
+    }
 }
