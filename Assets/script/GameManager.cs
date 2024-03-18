@@ -679,15 +679,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     void OtherCardsCount()
     {
         Text twoPText = twoPHand.GetComponentInChildren<Image>().GetComponentInChildren<Image>().GetComponentInChildren<Text>();
-        int twoPInt = twoPHand.transform.childCount - 1;
+        int twoPInt = twoPHand.transform.childCount - 2;
         twoPText.text = twoPInt.ToString();
         
         Text threePText = threePHand.GetComponentInChildren<Image>().GetComponentInChildren<Image>().GetComponentInChildren<Text>();
-        int threePInt = threePHand.transform.childCount - 1;
+        int threePInt = threePHand.transform.childCount - 2;
         threePText.text = threePInt.ToString();
         
         Text fourPText = fourPHand.GetComponentInChildren<Image>().GetComponentInChildren<Image>().GetComponentInChildren<Text>();
-        int fourPInt = fourPHand.transform.childCount - 1;
+        int fourPInt = fourPHand.transform.childCount - 2;
         fourPText.text = fourPInt.ToString();
     }
 
