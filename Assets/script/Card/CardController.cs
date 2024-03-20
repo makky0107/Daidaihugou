@@ -322,11 +322,19 @@ public class CardController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void TheBackSide()
     {
-        string parentName = transform.parent.name;
-        if (parentName == myHand || parentName == myField)
+        if (transform.parent != null)
+        {
+            string parentName = transform.parent.name;
+            if (parentName == myHand || parentName == myField)
+            {
+                BackSideNotActive();
+            }
+        }
+        else
         {
             BackSideNotActive();
         }
+
     }
 
     [PunRPC]

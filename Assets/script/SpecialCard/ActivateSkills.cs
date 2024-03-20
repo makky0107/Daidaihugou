@@ -431,7 +431,7 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
     {
         lS.photonView.RPC("AddLog", RpcTarget.All, $"ApexStrengeSearch");
 
-        if (searchCount >= 3 && hand.allCards.Count > 1)
+        if (searchCount <= 3 && hand.allCards.Count > 1)
         {
             CardController maxCard = hand.allCards.Find(x => x.model.Strenge == hand.allCards.Max(x => x.model.Strenge));
             photonView.RPC("CardPulass", RpcTarget.All, maxCard.model.ID);
@@ -439,9 +439,10 @@ public class ActivateSkills : MonoBehaviourPunCallbacks
 
             searchCount++;
 
+            lS.photonView.RPC("AddLog", RpcTarget.All, $"{hand} maxCard{maxCard.model.Strenge}");
+
             ApexStrengeSearch(hand);
-        }
-        
+        }       
     }
 
     [PunRPC]
